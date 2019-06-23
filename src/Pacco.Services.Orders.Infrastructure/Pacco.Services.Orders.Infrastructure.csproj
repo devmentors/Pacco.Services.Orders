@@ -7,6 +7,7 @@
     <ItemGroup>
         <PackageReference Include="Convey" Version="0.0.*" />
         <PackageReference Include="Convey.CQRS.Queries" Version="0.0.*" />
+        <PackageReference Include="Convey.Logging" Version="0.0.*" />
         <PackageReference Include="Convey.Persistence.MongoDB" Version="0.0.*" />
         <PackageReference Include="Convey.MessageBrokers" Version="0.0.*" />
         <PackageReference Include="Convey.MessageBrokers.CQRS" Version="0.0.*" />
@@ -14,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Pacco.Services.Orders.Application\Pacco.Services.Orders.Application.csproj" />
+        <ProjectReference Include="..\Pacco.Services.Orders.Application\Pacco.Services.Orders.Application.csproj" />
     </ItemGroup>
 
 </Project>
