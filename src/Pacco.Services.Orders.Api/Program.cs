@@ -1,0 +1,41 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Convey;
+using Convey.WebApi;
+using Convey.WebApi.CQRS;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Pacco.Services.Orders.Application;
+using Pacco.Services.Orders.Application.Commands;
+using Pacco.Services.Orders.Application.DTO;
+using Pacco.Services.Orders.Application.Queries;
+using Pacco.Services.Orders.Infrastructure;
+
+namespace Pacco.Services.Orders.Api
+{
+    public class Program
+    {
+        public static async Task Main(string[] args)
+            => await WebHost.CreateDefaultBuilder(args)
+                .ConfigureServices(services => services
+                    .AddConvey()
+                    .AddWebApi()
+                    .AddApplication()
+                    .AddInfrastructure()
+                    .Build())
+                .Configure(app => app
+                    .UseErrorHandler()
+                    .UsePublicContracts(false)
+                    .UseInfrastructure()
+                    .UseDispatcherEndpoints(endpoints => endpoints
+                        .Get("", ctx => ctx.Response.WriteAsync("Welcome to Pacco Orders Service!"))
+                        .Get<GetOrder, OrderDto>("orders/{id}")
+                        .Get<GetOrders, IEnumerable<OrderDto>>("orders")
+                        .Delete<CancelOrder>("orders/{id}")
+                        .Post<CreateOrder>("orders",
+                            afterDispatch: (cmd, ctx) => ctx.Response.Created($"orders/{cmd.Id}"))))
+                .Build()
+                .RunAsync();
+    }
+}
