@@ -3,15 +3,13 @@ using Convey.CQRS.Events;
 
 namespace Pacco.Services.Orders.Application.Events
 {
-    public class OrderCanceled : IEvent
+    public class OrderApproved : IEvent
     {
         public Guid Id { get; }
-        public string Reason { get; }
 
-        public OrderCanceled(Guid id, string reason)
+        public OrderApproved(Guid id)
         {
             Id = id;
-            Reason = reason;
         }
     }
 }

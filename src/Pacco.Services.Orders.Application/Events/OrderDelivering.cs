@@ -3,11 +3,11 @@ using Convey.CQRS.Events;
 
 namespace Pacco.Services.Orders.Application.Events
 {
-    public class ParcelAdded : IEvent
+    public class OrderDelivering : IEvent
     {
         public Guid Id { get; }
 
-        public ParcelAdded(Guid id)
+        public OrderDelivering(Guid id)
         {
             Id = id;
         }

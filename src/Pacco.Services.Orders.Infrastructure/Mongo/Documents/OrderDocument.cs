@@ -20,7 +20,6 @@ namespace Pacco.Services.Orders.Infrastructure.Mongo.Documents
             public string Name { get; set; }
             public string Variant { get; set; }
             public string Size { get; set; }
-            public decimal Price { get; set; }
         }
     }
 }

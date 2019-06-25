@@ -1,15 +1,15 @@
 using System;
 using Convey.CQRS.Events;
 
-namespace Pacco.Services.Orders.Application.Events
+namespace Pacco.Services.Orders.Application.Events.Rejected
 {
-    public class CancelOrderRejected : IRejectedEvent
+    public class DeleteOrderRejected : IRejectedEvent
     {
         public Guid Id { get; }
         public string Reason { get; }
         public string Code { get; }
 
-        public CancelOrderRejected(Guid id, string reason, string code)
+        public DeleteOrderRejected(Guid id, string reason, string code)
         {
             Id = id;
             Reason = reason;

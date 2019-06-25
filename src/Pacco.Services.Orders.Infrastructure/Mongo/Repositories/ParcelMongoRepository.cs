@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Convey.Persistence.MongoDB;
 using Pacco.Services.Orders.Core.Entities;
@@ -16,8 +17,22 @@ namespace Pacco.Services.Orders.Infrastructure.Mongo.Repositories
             _repository = repository;
         }
 
+        public async Task<Order> GetAsync(Guid id)
+        {
+            var order = await _repository.GetAsync(o => o.Id == id);
+
+            return order?.AsEntity();
+        }
+
+        public async Task<Order> GetContainingParcelAsync(Guid parcelId)
+        {
+            var order = await _repository.GetAsync(o => o.Parcels.Any(p => p.Id == parcelId));
+
+            return order?.AsEntity();
+        }
+
         public Task AddAsync(Order order) => _repository.AddAsync(order.AsDocument());
-        
+        public Task UpdateAsync(Order order) => _repository.UpdateAsync(order.AsDocument());
         public Task DeleteAsync(Guid id) => _repository.DeleteAsync(id);
     }
 }

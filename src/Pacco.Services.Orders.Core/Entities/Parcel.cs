@@ -4,24 +4,17 @@ namespace Pacco.Services.Orders.Core.Entities
 {
     public class Parcel : IEquatable<Parcel>
     {
-        public Guid Id { get; private set; }
-        public string Name { get; private set; }
-        public string Variant { get; private set; }
-        public string Size { get; private set; }
-        public decimal Price { get; private set; }
+        public Guid Id { get; }
+        public string Name { get; }
+        public string Variant { get; }
+        public string Size { get; }
 
-        public Parcel(Guid id, string name, string variant, string size, decimal price = 0)
+        public Parcel(Guid id, string name, string variant, string size)
         {
             Id = id;
             Name = name;
             Variant = variant;
             Size = size;
-            SetPrice(price);
-        }
-
-        public void SetPrice(decimal price)
-        {
-            Price = price;
         }
 
         public bool Equals(Parcel other)

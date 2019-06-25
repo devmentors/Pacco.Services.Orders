@@ -4,7 +4,7 @@ namespace Pacco.Services.Orders.Core.Entities
     {
         New,
         Approved,
-        Pending,
+        Delivering,
         Completed,
         Canceled
     }

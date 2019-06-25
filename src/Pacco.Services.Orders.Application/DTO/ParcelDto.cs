@@ -9,7 +9,6 @@ namespace Pacco.Services.Orders.Application.DTO
         public string Name { get; set; }
         public string Variant { get; set; }
         public string Size { get; set; }
-        public decimal Price { get; set; }
 
         public ParcelDto()
         {
@@ -21,7 +20,6 @@ namespace Pacco.Services.Orders.Application.DTO
             Name = parcel.Name;
             Variant = parcel.Variant;
             Size = parcel.Size;
-            Price = parcel.Price;
         }
     }
 }

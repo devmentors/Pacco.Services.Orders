@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pacco.Services.Orders.Core.Events;
+using Pacco.Services.Orders.Core.Exceptions;
 
 namespace Pacco.Services.Orders.Core.Entities
 {
@@ -12,6 +13,7 @@ namespace Pacco.Services.Orders.Core.Entities
         public OrderStatus Status { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public decimal TotalPrice { get; private set; }
+        public string CancellationReason { get; private set; }
 
         public IEnumerable<Parcel> Parcels
         {
@@ -27,17 +29,16 @@ namespace Pacco.Services.Orders.Core.Entities
             Status = status;
             CreatedAt = createdAt;
             Parcels = parcels ?? Enumerable.Empty<Parcel>();
-            CalculateTotalPrice();
-            AddEvent(new OrderCreated(this));
+            AddEvent(new OrderStateChanged(this));
         }
 
         public void AddParcel(Parcel parcel)
         {
             _parcels.Add(parcel);
-            CalculateTotalPrice();
+            AddEvent(new ParcelAdded(this, parcel));
         }
 
-        public void RemoveParcel(Guid id)
+        public void DeleteParcel(Guid id)
         {
             var parcel = _parcels.SingleOrDefault(p => p.Id == id);
             if (parcel is null)
@@ -46,12 +47,63 @@ namespace Pacco.Services.Orders.Core.Entities
             }
 
             _parcels.Remove(parcel);
-            CalculateTotalPrice();
+            AddEvent(new ParcelDeleted(this, parcel));
         }
 
-        private void CalculateTotalPrice()
+        public void Approve(decimal totalPrice)
         {
-            TotalPrice = _parcels.Sum(p => p.Price);
+            if (Status != OrderStatus.New)
+            {
+                throw new CannotChangeOrderStateException(Id, Status, OrderStatus.Approved);
+            }
+
+            SetTotalPrice(totalPrice);
+            Status = OrderStatus.Approved;
+            AddEvent(new OrderStateChanged(this));
+        }
+
+        private void SetTotalPrice(decimal totalPrice)
+        {
+            if (totalPrice < 0)
+            {
+                throw new InvalidOrderPrice(Id, totalPrice);
+            }
+
+            TotalPrice = totalPrice;
+        }
+
+        public void Cancel(string reason)
+        {
+            if (Status == OrderStatus.Completed || Status == OrderStatus.Canceled)
+            {
+                throw new CannotChangeOrderStateException(Id, Status, OrderStatus.Canceled);
+            }
+
+            Status = OrderStatus.Canceled;
+            CancellationReason = reason;
+            AddEvent(new OrderStateChanged(this));
+        }
+
+        public void Complete()
+        {
+            if (Status == OrderStatus.Completed || Status == OrderStatus.Canceled)
+            {
+                throw new CannotChangeOrderStateException(Id, Status, OrderStatus.Completed);
+            }
+
+            Status = OrderStatus.Completed;
+            AddEvent(new OrderStateChanged(this));
+        }
+
+        public void SetDelivering()
+        {
+            if (Status != OrderStatus.Approved)
+            {
+                throw new CannotChangeOrderStateException(Id, Status, OrderStatus.Delivering);
+            }
+
+            Status = OrderStatus.Delivering;
+            AddEvent(new OrderStateChanged(this));
         }
     }
 }

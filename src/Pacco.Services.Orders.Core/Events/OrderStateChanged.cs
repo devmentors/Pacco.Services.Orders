@@ -2,11 +2,11 @@ using Pacco.Services.Orders.Core.Entities;
 
 namespace Pacco.Services.Orders.Core.Events
 {
-    public class OrderCreated : IDomainEvent
+    public class OrderStateChanged : IDomainEvent
     {
         public Order Order { get; }
 
-        public OrderCreated(Order order)
+        public OrderStateChanged(Order order)
         {
             Order = order;
         }

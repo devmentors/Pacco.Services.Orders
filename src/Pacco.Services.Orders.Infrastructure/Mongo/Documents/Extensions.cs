@@ -23,8 +23,7 @@ namespace Pacco.Services.Orders.Infrastructure.Mongo.Documents
                     Id = p.Id,
                     Name = p.Name,
                     Size = p.Size,
-                    Variant = p.Variant,
-                    Price = p.Price
+                    Variant = p.Variant
                 })
             };
 
@@ -41,8 +40,7 @@ namespace Pacco.Services.Orders.Infrastructure.Mongo.Documents
                     Id = p.Id,
                     Name = p.Name,
                     Size = p.Size,
-                    Variant = p.Variant,
-                    Price = p.Price
+                    Variant = p.Variant
                 })
             };
     }

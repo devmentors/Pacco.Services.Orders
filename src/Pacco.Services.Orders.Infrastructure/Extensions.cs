@@ -7,7 +7,8 @@ using Convey.Persistence.MongoDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Pacco.Services.Orders.Application.Commands;
-using Pacco.Services.Orders.Application.Events;
+using Pacco.Services.Orders.Application.Events.External;
+using Pacco.Services.Orders.Application.Events.External.Handlers;
 using Pacco.Services.Orders.Application.Services;
 using Pacco.Services.Orders.Core.Repositories;
 using Pacco.Services.Orders.Infrastructure.Mongo.Documents;
@@ -34,10 +35,18 @@ namespace Pacco.Services.Orders.Infrastructure
 
         public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
         {
-            app.UseInitializers().UseRabbitMq()
+            app.UseInitializers()
+                .UseRabbitMq()
+                .SubscribeCommand<ApproveOrder>()
                 .SubscribeCommand<CreateOrder>()
                 .SubscribeCommand<CancelOrder>()
-                .SubscribeEvent<ParcelAdded>();
+                .SubscribeCommand<DeleteOrder>()
+                .SubscribeCommand<AddParcelToOrder>()
+                .SubscribeCommand<DeleteParcelFromOrder>()
+                .SubscribeEvent<DeliveryCompleted>()
+                .SubscribeEvent<DeliveryFailed>()
+                .SubscribeEvent<DeliveryStarted>()
+                .SubscribeEvent<ParcelDeleted>();
 
             return app;
         }

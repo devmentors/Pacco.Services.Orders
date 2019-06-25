@@ -3,15 +3,13 @@ using Convey.CQRS.Commands;
 
 namespace Pacco.Services.Orders.Application.Commands
 {
-    public class CancelOrder : ICommand
+    public class ApproveOrder : ICommand
     {
         public Guid Id { get; }
-        public string Reason { get; }
 
-        public CancelOrder(Guid id, string reason)
+        public ApproveOrder(Guid id)
         {
             Id = id;
-            Reason = reason;
         }
     }
 }
