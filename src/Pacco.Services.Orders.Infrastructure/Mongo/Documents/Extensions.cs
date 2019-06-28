@@ -11,7 +11,7 @@ namespace Pacco.Services.Orders.Infrastructure.Mongo.Documents
                 document.Parcels.Select(p => new Parcel(p.Id, p.Name, p.Variant, p.Size)));
 
         public static OrderDocument AsDocument(this Order entity)
-            => new OrderDocument()
+            => new OrderDocument
             {
                 Id = entity.Id,
                 CustomerId = entity.CustomerId,

@@ -5,11 +5,13 @@ namespace Pacco.Services.Orders.Application.Events
 {
     public class OrderCompleted : IEvent
     {
-        public Guid Id { get; }
+        public Guid OrderId { get; }
+        public Guid CustomerId { get; }
 
-        public OrderCompleted(Guid id)
+        public OrderCompleted( Guid orderId, Guid customerId)
         {
-            Id = id;
+            OrderId = orderId;
+            CustomerId = customerId;
         }
     }
 }

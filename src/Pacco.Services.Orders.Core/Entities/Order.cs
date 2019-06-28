@@ -32,22 +32,32 @@ namespace Pacco.Services.Orders.Core.Entities
             AddEvent(new OrderStateChanged(this));
         }
 
-        public void AddParcel(Parcel parcel)
+        public bool CanBeDeleted() => Status == OrderStatus.New;
+
+        public bool AddParcel(Parcel parcel)
         {
-            _parcels.Add(parcel);
+            if (!_parcels.Add(parcel))
+            {
+                return false;
+            }
+
             AddEvent(new ParcelAdded(this, parcel));
+
+            return true;
         }
 
-        public void DeleteParcel(Guid id)
+        public bool DeleteParcel(Guid id)
         {
             var parcel = _parcels.SingleOrDefault(p => p.Id == id);
             if (parcel is null)
             {
-                return;
+                return false;
             }
 
             _parcels.Remove(parcel);
             AddEvent(new ParcelDeleted(this, parcel));
+
+            return true;
         }
 
         public void Approve(decimal totalPrice)
@@ -66,7 +76,7 @@ namespace Pacco.Services.Orders.Core.Entities
         {
             if (totalPrice < 0)
             {
-                throw new InvalidOrderPrice(Id, totalPrice);
+                throw new InvalidOrderPriceException(Id, totalPrice);
             }
 
             TotalPrice = totalPrice;

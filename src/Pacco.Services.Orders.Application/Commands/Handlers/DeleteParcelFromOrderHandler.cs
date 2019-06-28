@@ -20,7 +20,7 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
             _messageBroker = messageBroker;
             _eventMapper = eventMapper;
         }
-        
+
         public async Task HandleAsync(DeleteParcelFromOrder command)
         {
             var order = await _orderRepository.GetAsync(command.OrderId);
@@ -29,7 +29,11 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
                 throw new OrderNotFoundException(command.OrderId);
             }
 
-            order.DeleteParcel(command.ParcelId);
+            if (!order.DeleteParcel(command.ParcelId))
+            {
+                return;
+            }
+
             await _orderRepository.UpdateAsync(order);
             var events = _eventMapper.MapAll(order.Events);
             await _messageBroker.PublishAsync(events.ToArray());

@@ -1,9 +1,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Convey.CQRS.Commands;
-using Pacco.Services.Orders.Application.Clients;
 using Pacco.Services.Orders.Application.Exceptions;
 using Pacco.Services.Orders.Application.Services;
+using Pacco.Services.Orders.Application.Services.Clients;
 using Pacco.Services.Orders.Core.Repositories;
 
 namespace Pacco.Services.Orders.Application.Commands.Handlers

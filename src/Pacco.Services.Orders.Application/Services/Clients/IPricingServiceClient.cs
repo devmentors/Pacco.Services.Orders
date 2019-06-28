@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Pacco.Services.Orders.Application.Clients
+namespace Pacco.Services.Orders.Application.Services.Clients
 {
     public interface IPricingServiceClient
     {

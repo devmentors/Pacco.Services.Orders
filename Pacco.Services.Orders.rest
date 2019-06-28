@@ -1,0 +1,31 @@
+@url = http://localhost:5007
+@orderId = 6d14e0bc-eea7-4d89-bf2e-741536726f04
+@customerId = b5268d75-71ac-4907-98d3-d6f697826c69
+@parcelId = def4db69-634d-4c0c-b088-4297f460e8b2
+
+###
+GET {{url}}/orders?customerId={{customerId}}
+
+###
+GET {{url}}/orders/{{orderId}}
+
+###
+POST {{url}}/orders
+
+{
+  "customerId": "{{customerId}}"
+}
+
+###
+DELETE {{url}}/orders/{{orderId}}
+
+###
+POST {{url}}/orders/{{orderId}}/parcels
+
+{
+  "orderId": "{{orderId}}",
+  "parcelId": "{{parcelId}}"
+}
+
+###
+DELETE {{url}}/orders/{{orderId}}/parcels/{{parcelId}}

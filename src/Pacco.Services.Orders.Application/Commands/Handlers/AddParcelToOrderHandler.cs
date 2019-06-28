@@ -1,9 +1,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Convey.CQRS.Commands;
-using Pacco.Services.Orders.Application.Clients;
 using Pacco.Services.Orders.Application.Exceptions;
 using Pacco.Services.Orders.Application.Services;
+using Pacco.Services.Orders.Application.Services.Clients;
 using Pacco.Services.Orders.Core.Entities;
 using Pacco.Services.Orders.Core.Repositories;
 
@@ -40,7 +40,11 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
                 throw new ParcelNotFoundException(command.ParcelId);
             }
 
-            order.AddParcel(new Parcel(parcel.Id, parcel.Name, parcel.Variant, parcel.Size));
+            if (!order.AddParcel(new Parcel(parcel.Id, parcel.Name, parcel.Variant, parcel.Size)))
+            {
+                return;
+            }
+
             await _orderRepository.UpdateAsync(order);
             var events = _eventMapper.MapAll(order.Events);
             await _messageBroker.PublishAsync(events.ToArray());

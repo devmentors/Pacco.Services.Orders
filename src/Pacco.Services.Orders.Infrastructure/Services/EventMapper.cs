@@ -28,7 +28,7 @@ namespace Pacco.Services.Orders.Infrastructure.Services
                         case OrderStatus.Delivering:
                             return new OrderDelivering(e.Order.Id);
                         case OrderStatus.Completed:
-                            return new OrderCompleted(e.Order.Id);
+                            return new OrderCompleted(e.Order.Id, e.Order.CustomerId);
                         case OrderStatus.Canceled:
                             return new OrderCanceled(e.Order.Id, e.Order.CancellationReason);
                     }
