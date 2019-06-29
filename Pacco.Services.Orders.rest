@@ -1,7 +1,7 @@
 @url = http://localhost:5007
-@orderId = 069daf93-d76a-4ccc-a130-984ce1158850
-@customerId = 3ecce964-6ba3-41e2-973c-ca3cb78609f3
-@parcelId = c2ab6285-eea4-454d-97dc-eb17725575b6
+@orderId = a74006d4-35a6-4585-82d8-e2173425164c
+@parcelId = 3a113f84-d659-4eb3-889a-3962590752f8
+@customerId = 8b5bcbc8-b18a-41ef-9f4e-c80e293af0aa
 
 ###
 GET {{url}}/orders?customerId={{customerId}}

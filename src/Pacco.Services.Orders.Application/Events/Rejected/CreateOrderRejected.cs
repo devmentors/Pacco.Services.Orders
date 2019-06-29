@@ -3,6 +3,7 @@ using Convey.CQRS.Events;
 
 namespace Pacco.Services.Orders.Application.Events.Rejected
 {
+    [Contract]
     public class CreateOrderRejected : IRejectedEvent
     {
         public Guid Id { get; }

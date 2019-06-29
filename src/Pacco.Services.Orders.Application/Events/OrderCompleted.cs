@@ -3,6 +3,7 @@ using Convey.CQRS.Events;
 
 namespace Pacco.Services.Orders.Application.Events
 {
+    [Contract]
     public class OrderCompleted : IEvent
     {
         public Guid OrderId { get; }

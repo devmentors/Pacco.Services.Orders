@@ -2,6 +2,7 @@ using System;
 
 namespace Pacco.Services.Orders.Application.Events.Rejected
 {
+    [Contract]
     public class DeleteParcelFromOrderRejected
     {
         public Guid OrderId { get; }

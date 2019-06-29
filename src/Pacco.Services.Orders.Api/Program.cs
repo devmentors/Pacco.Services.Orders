@@ -24,8 +24,6 @@ namespace Pacco.Services.Orders.Api {
                 .AddInfrastructure()
                 .Build())
             .Configure(app => app
-                .UseErrorHandler()
-                .UsePublicContracts(false)
                 .UseInfrastructure()
                 .UseDispatcherEndpoints(endpoints => endpoints
                     .Get("", ctx => ctx.Response.WriteAsync("Welcome to Pacco Orders Service!"))
