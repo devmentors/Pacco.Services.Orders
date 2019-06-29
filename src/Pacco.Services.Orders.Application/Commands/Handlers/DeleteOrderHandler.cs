@@ -27,7 +27,7 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
                 throw new OrderNotFoundException(command.Id);
             }
 
-            if (!order.CanBeDeleted())
+            if (!order.CanBeDeleted)
             {
                 throw new CannotDeleteOrderException(command.Id);
             }

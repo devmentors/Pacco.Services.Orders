@@ -15,6 +15,7 @@ namespace Pacco.Services.Orders.Infrastructure.Mongo.Documents
             {
                 Id = entity.Id,
                 CustomerId = entity.CustomerId,
+                VehicleId = entity.VehicleId,
                 Status = entity.Status,
                 CreatedAt = entity.CreatedAt,
                 TotalPrice = entity.TotalPrice,
@@ -32,6 +33,7 @@ namespace Pacco.Services.Orders.Infrastructure.Mongo.Documents
             {
                 Id = document.Id,
                 CustomerId = document.CustomerId,
+                VehicleId = document.VehicleId,
                 Status = document.Status.ToString().ToLowerInvariant(),
                 CreatedAt = document.CreatedAt,
                 TotalPrice = document.TotalPrice,

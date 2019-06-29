@@ -1,7 +1,4 @@
 using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using Convey;
 using Convey.CQRS.Queries;
 using Convey.Discovery.Consul;
@@ -65,19 +62,11 @@ namespace Pacco.Services.Orders.Infrastructure
                 .SubscribeEvent<DeliveryCompleted>()
                 .SubscribeEvent<DeliveryFailed>()
                 .SubscribeEvent<DeliveryStarted>()
-                .SubscribeEvent<ParcelDeleted>();
+                .SubscribeEvent<ParcelDeleted>()
+                .SubscribeEvent<ResourceReserved>()
+                .SubscribeEvent<VehicleSelected>();
 
             return app;
-        }
-
-        internal sealed class MyMessageHandler : DelegatingHandler
-        {
-            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
-                CancellationToken cancellationToken)
-            {
-                Console.WriteLine("AAAAA");
-                return base.SendAsync(request, cancellationToken);
-            }
         }
     }
 }

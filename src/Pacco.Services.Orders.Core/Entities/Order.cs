@@ -10,10 +10,12 @@ namespace Pacco.Services.Orders.Core.Entities
     {
         private ISet<Parcel> _parcels = new HashSet<Parcel>();
         public Guid CustomerId { get; private set; }
+        public Guid? VehicleId { get; private set; }
         public OrderStatus Status { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public decimal TotalPrice { get; private set; }
         public string CancellationReason { get; private set; }
+        public bool CanBeDeleted => Status == OrderStatus.New;
 
         public IEnumerable<Parcel> Parcels
         {
@@ -22,17 +24,36 @@ namespace Pacco.Services.Orders.Core.Entities
         }
 
         public Order(AggregateId id, Guid customerId, OrderStatus status, DateTime createdAt,
-            IEnumerable<Parcel> parcels = null)
+            IEnumerable<Parcel> parcels = null, Guid? vehicleId = null)
         {
             Id = id;
             CustomerId = customerId;
             Status = status;
             CreatedAt = createdAt;
             Parcels = parcels ?? Enumerable.Empty<Parcel>();
+            VehicleId = vehicleId;
             AddEvent(new OrderStateChanged(this));
         }
+        
+        public void SetTotalPrice(decimal totalPrice)
+        {
+            if (Status != OrderStatus.New)
+            {
+                throw new CannotChangeOrderPriceException(Id);
+            }
+            
+            if (totalPrice < 0)
+            {
+                throw new InvalidOrderPriceException(Id, totalPrice);
+            }
 
-        public bool CanBeDeleted() => Status == OrderStatus.New;
+            TotalPrice = totalPrice;
+        }
+        
+        public void SetVehicle(Guid vehicleId)
+        {
+            VehicleId = vehicleId;
+        }
 
         public bool AddParcel(Parcel parcel)
         {
@@ -60,28 +81,17 @@ namespace Pacco.Services.Orders.Core.Entities
             return true;
         }
 
-        public void Approve(decimal totalPrice)
+        public void Approve()
         {
             if (Status != OrderStatus.New)
             {
                 throw new CannotChangeOrderStateException(Id, Status, OrderStatus.Approved);
             }
 
-            SetTotalPrice(totalPrice);
             Status = OrderStatus.Approved;
             AddEvent(new OrderStateChanged(this));
         }
-
-        private void SetTotalPrice(decimal totalPrice)
-        {
-            if (totalPrice < 0)
-            {
-                throw new InvalidOrderPriceException(Id, totalPrice);
-            }
-
-            TotalPrice = totalPrice;
-        }
-
+        
         public void Cancel(string reason)
         {
             if (Status == OrderStatus.Completed || Status == OrderStatus.Canceled)

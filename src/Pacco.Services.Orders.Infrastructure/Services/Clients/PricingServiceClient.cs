@@ -18,5 +18,10 @@ namespace Pacco.Services.Orders.Infrastructure.Services.Clients
 
         public Task<decimal> GetTotalPriceAsync(Guid orderId)
             => _httpClient.GetAsync<decimal>($"{_url}/pricing/{orderId}");
+
+        public Task<decimal> GetOrderPriceAsync(Guid orderId, decimal price)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace Pacco.Services.Orders.Infrastructure.Mongo.Documents
     {
         public Guid Id { get; set; }
         public Guid CustomerId { get; set; }
+        public Guid? VehicleId { get; set; }
         public OrderStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
         public decimal TotalPrice { get; set; }

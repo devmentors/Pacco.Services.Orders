@@ -9,6 +9,7 @@ namespace Pacco.Services.Orders.Application.DTO
     {
         public Guid Id { get; set; }
         public Guid CustomerId { get; set; }
+        public Guid? VehicleId { get; set; }
         public string Status { get; set; }
         public DateTime CreatedAt { get; set; }
         public decimal TotalPrice { get; set; }
@@ -22,6 +23,7 @@ namespace Pacco.Services.Orders.Application.DTO
         {
             Id = order.Id;
             CustomerId = order.CustomerId;
+            VehicleId = order.VehicleId;
             Status = order.Status.ToString().ToLowerInvariant();
             CreatedAt = order.CreatedAt;
             TotalPrice = order.TotalPrice;
