@@ -8,7 +8,8 @@ namespace Pacco.Services.Orders.Infrastructure.Mongo.Documents
     {
         public static Order AsEntity(this OrderDocument document)
             => new Order(document.Id, document.CustomerId, document.Status, document.CreatedAt,
-                document.Parcels.Select(p => new Parcel(p.Id, p.Name, p.Variant, p.Size)));
+                document.Parcels.Select(p => new Parcel(p.Id, p.Name, p.Variant, p.Size)),
+                document.VehicleId, document.DeliveryDate);
 
         public static OrderDocument AsDocument(this Order entity)
             => new OrderDocument
@@ -18,6 +19,7 @@ namespace Pacco.Services.Orders.Infrastructure.Mongo.Documents
                 VehicleId = entity.VehicleId,
                 Status = entity.Status,
                 CreatedAt = entity.CreatedAt,
+                DeliveryDate = entity.DeliveryDate,
                 TotalPrice = entity.TotalPrice,
                 Parcels = entity.Parcels.Select(p => new OrderDocument.Parcel
                 {
@@ -36,6 +38,7 @@ namespace Pacco.Services.Orders.Infrastructure.Mongo.Documents
                 VehicleId = document.VehicleId,
                 Status = document.Status.ToString().ToLowerInvariant(),
                 CreatedAt = document.CreatedAt,
+                DeliveryDate = document.DeliveryDate,
                 TotalPrice = document.TotalPrice,
                 Parcels = document.Parcels.Select(p => new ParcelDto
                 {

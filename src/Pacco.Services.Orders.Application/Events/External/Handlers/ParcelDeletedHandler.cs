@@ -20,15 +20,15 @@ namespace Pacco.Services.Orders.Application.Events.External.Handlers
             _eventMapper = eventMapper;
         }
 
-        public async Task HandleAsync(ParcelDeleted command)
+        public async Task HandleAsync(ParcelDeleted @event)
         {
-            var order = await _orderRepository.GetContainingParcelAsync(command.Id);
+            var order = await _orderRepository.GetContainingParcelAsync(@event.Id);
             if (order is null)
             {
                 return;
             }
 
-            order.DeleteParcel(command.Id);
+            order.DeleteParcel(@event.Id);
             await _orderRepository.UpdateAsync(order);
             var events = _eventMapper.MapAll(order.Events);
             await _messageBroker.PublishAsync(events.ToArray());

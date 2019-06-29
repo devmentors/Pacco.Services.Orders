@@ -12,6 +12,7 @@ namespace Pacco.Services.Orders.Infrastructure.Mongo.Documents
         public Guid? VehicleId { get; set; }
         public OrderStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
+        public DateTime? DeliveryDate { get; set; }
         public decimal TotalPrice { get; set; }
         public IEnumerable<Parcel> Parcels { get; set; }
 

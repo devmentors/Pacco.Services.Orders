@@ -24,6 +24,13 @@ namespace Pacco.Services.Orders.Infrastructure.Mongo.Repositories
             return order?.AsEntity();
         }
 
+        public async Task<Order> GetAsync(Guid vehicleId, DateTime deliveryDate)
+        {
+            var order = await _repository.GetAsync(o => o.VehicleId == vehicleId && o.DeliveryDate == deliveryDate);
+
+            return order?.AsEntity();
+        }
+
         public async Task<Order> GetContainingParcelAsync(Guid parcelId)
         {
             var order = await _repository.GetAsync(o => o.Parcels.Any(p => p.Id == parcelId));

@@ -7,7 +7,7 @@ namespace Pacco.Services.Orders.Application.Exceptions
     {
         public override string Code => "parcel_not_found";
         
-        public ParcelNotFoundException(Guid orderId) : base($"Parcel with id: {orderId} was not found.")
+        public ParcelNotFoundException(Guid id) : base($"Parcel with id: {id} was not found.")
         {
         }
     }

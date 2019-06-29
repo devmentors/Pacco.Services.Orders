@@ -21,12 +21,12 @@ namespace Pacco.Services.Orders.Application.Events.External.Handlers
             _eventMapper = eventMapper;
         }
 
-        public async Task HandleAsync(DeliveryStarted command)
+        public async Task HandleAsync(DeliveryStarted @event)
         {
-            var order = await _orderRepository.GetAsync(command.OrderId);
+            var order = await _orderRepository.GetAsync(@event.OrderId);
             if (order is null)
             {
-                throw new OrderNotFoundException(command.OrderId);
+                throw new OrderNotFoundException(@event.OrderId);
             }
 
             order.SetDelivering();

@@ -13,6 +13,7 @@ namespace Pacco.Services.Orders.Core.Entities
         public Guid? VehicleId { get; private set; }
         public OrderStatus Status { get; private set; }
         public DateTime CreatedAt { get; private set; }
+        public DateTime? DeliveryDate { get; private set; }
         public decimal TotalPrice { get; private set; }
         public string CancellationReason { get; private set; }
         public bool CanBeDeleted => Status == OrderStatus.New;
@@ -24,7 +25,7 @@ namespace Pacco.Services.Orders.Core.Entities
         }
 
         public Order(AggregateId id, Guid customerId, OrderStatus status, DateTime createdAt,
-            IEnumerable<Parcel> parcels = null, Guid? vehicleId = null)
+            IEnumerable<Parcel> parcels = null, Guid? vehicleId = null, DateTime? deliveryDate = null)
         {
             Id = id;
             CustomerId = customerId;
@@ -32,6 +33,7 @@ namespace Pacco.Services.Orders.Core.Entities
             CreatedAt = createdAt;
             Parcels = parcels ?? Enumerable.Empty<Parcel>();
             VehicleId = vehicleId;
+            DeliveryDate = deliveryDate;
             AddEvent(new OrderStateChanged(this));
         }
         
@@ -53,6 +55,11 @@ namespace Pacco.Services.Orders.Core.Entities
         public void SetVehicle(Guid vehicleId)
         {
             VehicleId = vehicleId;
+        }
+
+        public void SetDeliveryDate(DateTime deliveryDate)
+        {
+            DeliveryDate = deliveryDate;
         }
 
         public bool AddParcel(Parcel parcel)

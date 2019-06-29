@@ -12,6 +12,7 @@ namespace Pacco.Services.Orders.Application.DTO
         public Guid? VehicleId { get; set; }
         public string Status { get; set; }
         public DateTime CreatedAt { get; set; }
+        public DateTime? DeliveryDate { get; set; }
         public decimal TotalPrice { get; set; }
         public IEnumerable<ParcelDto> Parcels { get; set; }
 
@@ -26,6 +27,7 @@ namespace Pacco.Services.Orders.Application.DTO
             VehicleId = order.VehicleId;
             Status = order.Status.ToString().ToLowerInvariant();
             CreatedAt = order.CreatedAt;
+            DeliveryDate = order.DeliveryDate;
             TotalPrice = order.TotalPrice;
             Parcels = order.Parcels.Select(p => new ParcelDto(p));
         }

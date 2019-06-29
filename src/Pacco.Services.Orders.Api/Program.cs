@@ -33,7 +33,8 @@ namespace Pacco.Services.Orders.Api {
                     .Post<CreateOrder>("orders",
                         afterDispatch: (cmd, ctx) => ctx.Response.Created($"orders/{cmd.Id}"))
                     .Post<AddParcelToOrder>("orders/{orderId}/parcels")
-                    .Delete<DeleteParcelFromOrder>("orders/{orderId}/parcels/{parcelId}")))
+                    .Delete<DeleteParcelFromOrder>("orders/{orderId}/parcels/{parcelId}")
+                    .Post<AssignVehicleToOrder>("orders/{orderId}/vehicles")))
             .UseLogging()
             .Build()
             .RunAsync();

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Pacco.Services.Orders.Application;
 using Pacco.Services.Orders.Application.Commands;
+using Pacco.Services.Orders.Application.Commands.Handlers;
 using Pacco.Services.Orders.Application.Events.External;
 using Pacco.Services.Orders.Application.Services;
 using Pacco.Services.Orders.Application.Services.Clients;
@@ -34,7 +35,8 @@ namespace Pacco.Services.Orders.Infrastructure
             builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
             builder.Services.AddTransient<IParcelsServiceClient, ParcelsServiceClient>();
             builder.Services.AddTransient<IPricingServiceClient, PricingServiceClient>();
-            
+            builder.Services.AddTransient<IVehiclesServiceClient, VehiclesServiceClient>();
+
             return builder
                 .AddQueryHandlers()
                 .AddInMemoryQueryDispatcher()
@@ -59,12 +61,13 @@ namespace Pacco.Services.Orders.Infrastructure
                 .SubscribeCommand<DeleteOrder>()
                 .SubscribeCommand<AddParcelToOrder>()
                 .SubscribeCommand<DeleteParcelFromOrder>()
+                .SubscribeCommand<AssignVehicleToOrder>()
                 .SubscribeEvent<DeliveryCompleted>()
                 .SubscribeEvent<DeliveryFailed>()
                 .SubscribeEvent<DeliveryStarted>()
                 .SubscribeEvent<ParcelDeleted>()
                 .SubscribeEvent<ResourceReserved>()
-                .SubscribeEvent<VehicleSelected>();
+                .SubscribeEvent<ResourceReservationCanceled>();
 
             return app;
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Convey.CQRS.Events;
@@ -7,13 +8,13 @@ using Pacco.Services.Orders.Core.Repositories;
 
 namespace Pacco.Services.Orders.Application.Events.External.Handlers
 {
-    public class DeliveryFailedHandler : IEventHandler<DeliveryFailed>
+    public class ResourceReservationCanceledHandler : IEventHandler<ResourceReservationCanceled>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMessageBroker _messageBroker;
         private readonly IEventMapper _eventMapper;
 
-        public DeliveryFailedHandler(IOrderRepository orderRepository, IMessageBroker messageBroker,
+        public ResourceReservationCanceledHandler(IOrderRepository orderRepository, IMessageBroker messageBroker,
             IEventMapper eventMapper)
         {
             _orderRepository = orderRepository;
@@ -21,15 +22,15 @@ namespace Pacco.Services.Orders.Application.Events.External.Handlers
             _eventMapper = eventMapper;
         }
 
-        public async Task HandleAsync(DeliveryFailed @event)
+        public async Task HandleAsync(ResourceReservationCanceled @event)
         {
-            var order = await _orderRepository.GetAsync(@event.OrderId);
+            var order = await _orderRepository.GetAsync(@event.Id, @event.Date);
             if (order is null)
             {
-                throw new OrderNotFoundException(@event.OrderId);
+                throw new OrderNotFoundException(Guid.Empty);
             }
 
-            order.Cancel(@event.Reason);
+            order.Cancel("Reservation canceled.");
             await _orderRepository.UpdateAsync(order);
             var events = _eventMapper.MapAll(order.Events);
             await _messageBroker.PublishAsync(events.ToArray());
