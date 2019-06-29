@@ -3,6 +3,7 @@ using Convey.CQRS.Commands;
 
 namespace Pacco.Services.Orders.Application.Commands
 {
+    [Contract]
     public class CreateOrder : ICommand
     {
         public Guid Id { get; }
