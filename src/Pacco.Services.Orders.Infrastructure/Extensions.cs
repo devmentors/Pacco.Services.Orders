@@ -18,6 +18,7 @@ using Pacco.Services.Orders.Application.Events.External;
 using Pacco.Services.Orders.Application.Services;
 using Pacco.Services.Orders.Application.Services.Clients;
 using Pacco.Services.Orders.Core.Repositories;
+using Pacco.Services.Orders.Infrastructure.Exceptions;
 using Pacco.Services.Orders.Infrastructure.Mongo.Documents;
 using Pacco.Services.Orders.Infrastructure.Mongo.Repositories;
 using Pacco.Services.Orders.Infrastructure.Services;
@@ -44,6 +45,7 @@ namespace Pacco.Services.Orders.Infrastructure
                 .AddConsul()
                 .AddFabio()
                 .AddRabbitMq()
+                .AddExceptionToMessageMapper<ExceptionToMessageMapper>()
                 .AddMongo()
                 .AddMongoRepository<OrderDocument, Guid>("Orders");
         }

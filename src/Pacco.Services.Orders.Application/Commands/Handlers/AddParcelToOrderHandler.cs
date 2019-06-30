@@ -28,7 +28,13 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
 
         public async Task HandleAsync(AddParcelToOrder command)
         {
-            var order = await _orderRepository.GetAsync(command.OrderId);
+            var order = await _orderRepository.GetContainingParcelAsync(command.ParcelId);
+            if (!(order is null))
+            {
+                throw new ParcelAlreadyAddedToOrderException(command.OrderId, command.ParcelId);
+            }
+
+            order = await _orderRepository.GetAsync(command.OrderId);
             if (order is null)
             {
                 throw new OrderNotFoundException(command.OrderId);

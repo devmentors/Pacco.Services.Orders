@@ -27,10 +27,10 @@ namespace Pacco.Services.Orders.Application.Events.External.Handlers
             var order = await _orderRepository.GetAsync(@event.Id, @event.Date);
             if (order is null)
             {
-                throw new OrderNotFoundException(Guid.Empty);
+                throw new OrderForReservedVehicleNotFoundException(@event.Id, @event.Date);
             }
 
-            order.Cancel("Reservation canceled.");
+            order.Cancel($"Reservation canceled at: {@event.Date}");
             await _orderRepository.UpdateAsync(order);
             var events = _eventMapper.MapAll(order.Events);
             await _messageBroker.PublishAsync(events.ToArray());

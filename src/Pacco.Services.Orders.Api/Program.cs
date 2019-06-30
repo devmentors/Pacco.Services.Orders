@@ -13,7 +13,8 @@ using Pacco.Services.Orders.Application.DTO;
 using Pacco.Services.Orders.Application.Queries;
 using Pacco.Services.Orders.Infrastructure;
 
-namespace Pacco.Services.Orders.Api {
+namespace Pacco.Services.Orders.Api 
+{
     public class Program
     {
         public static async Task Main(string[] args) => await WebHost.CreateDefaultBuilder(args)

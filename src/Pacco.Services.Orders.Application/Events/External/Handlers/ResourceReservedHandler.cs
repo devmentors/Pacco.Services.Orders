@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Convey.CQRS.Events;
@@ -27,7 +26,7 @@ namespace Pacco.Services.Orders.Application.Events.External.Handlers
             var order = await _orderRepository.GetAsync(@event.Id, @event.Date);
             if (order is null)
             {
-                throw new OrderNotFoundException(Guid.Empty);
+                throw new OrderForReservedVehicleNotFoundException(@event.Id, @event.Date);
             }
 
             order.Approve();
