@@ -17,6 +17,7 @@ namespace Pacco.Services.Orders.Core.Entities
         public decimal TotalPrice { get; private set; }
         public string CancellationReason { get; private set; }
         public bool CanBeDeleted => Status == OrderStatus.New;
+        public bool HasParcels => Parcels.Any();
 
         public IEnumerable<Parcel> Parcels
         {

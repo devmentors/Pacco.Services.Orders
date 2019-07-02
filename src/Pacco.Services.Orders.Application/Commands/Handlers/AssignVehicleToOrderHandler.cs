@@ -4,6 +4,7 @@ using Pacco.Services.Orders.Application.Events;
 using Pacco.Services.Orders.Application.Exceptions;
 using Pacco.Services.Orders.Application.Services;
 using Pacco.Services.Orders.Application.Services.Clients;
+using Pacco.Services.Orders.Core.Entities;
 using Pacco.Services.Orders.Core.Repositories;
 
 namespace Pacco.Services.Orders.Application.Commands.Handlers
@@ -33,13 +34,23 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
                 throw new OrderNotFoundException(command.OrderId);
             }
 
+            if (!order.HasParcels)
+            {
+                throw new OrderHasNoParcelsException(command.OrderId);
+            }
+            
+            if (order.Status != OrderStatus.New)
+            {
+                return;
+            }
+
             var vehicle = await _vehiclesServiceClient.GetAsync(command.VehicleId);
             if (vehicle is null)
             {
                 throw new VehicleNotFoundException(command.VehicleId);
             }
 
-            var orderPrice = await _pricingServiceClient.GetOrderPriceAsync(command.OrderId, vehicle.PricePerService);
+            var orderPrice = await _pricingServiceClient.GetOrderPriceAsync(order.CustomerId, vehicle.PricePerService);
             order.SetVehicle(command.VehicleId);
             order.SetTotalPrice(orderPrice);
             await _orderRepository.UpdateAsync(order);

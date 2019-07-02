@@ -17,9 +17,11 @@ namespace Pacco.Services.Orders.Infrastructure.Exceptions
             {
                 case CannotDeleteOrderException ex: return new DeleteOrderRejected(ex.Id, ex.Message, ex.Code);
 
+                case CustomerNotFoundException ex: return new CreateOrderRejected(ex.Id, ex.Message, ex.Code);
+                
                 case OrderForReservedVehicleNotFoundException ex:
                     return new OrderForReservedVehicleNotFound(ex.VehicleId, ex.Date, ex.Message, ex.Code);
-
+                
                 case OrderNotFoundException ex:
                     switch (message)
                     {
@@ -39,6 +41,15 @@ namespace Pacco.Services.Orders.Infrastructure.Exceptions
 
                     break;
 
+                case OrderHasNoParcelsException ex:
+                    switch (message)
+                    {
+                        case AddParcelToOrder m:
+                            return new AssignVehicleToOrderRejected(m.OrderId, m.ParcelId, ex.Message, ex.Code);
+                    }
+
+                    break;
+                
                 case ParcelNotFoundException ex:
                     switch (message)
                     {
@@ -47,7 +58,7 @@ namespace Pacco.Services.Orders.Infrastructure.Exceptions
                     }
 
                     break;
-
+                
                 case ParcelAlreadyAddedToOrderException ex:
                     return new AddParcelToOrderRejected(ex.OrderId, ex.ParcelId, ex.Message, ex.Code);
 

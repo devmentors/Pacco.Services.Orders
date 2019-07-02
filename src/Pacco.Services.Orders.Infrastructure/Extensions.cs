@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Pacco.Services.Orders.Application;
 using Pacco.Services.Orders.Application.Commands;
-using Pacco.Services.Orders.Application.Commands.Handlers;
 using Pacco.Services.Orders.Application.Events.External;
 using Pacco.Services.Orders.Application.Services;
 using Pacco.Services.Orders.Application.Services.Clients;
@@ -32,6 +31,7 @@ namespace Pacco.Services.Orders.Infrastructure
         {
             builder.Services.AddSingleton<IEventMapper, EventMapper>();
             builder.Services.AddTransient<IMessageBroker, MessageBroker>();
+            builder.Services.AddTransient<ICustomerRepository, CustomerMongoRepository>();
             builder.Services.AddTransient<IOrderRepository, OrderMongoRepository>();
             builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
             builder.Services.AddTransient<IParcelsServiceClient, ParcelsServiceClient>();
@@ -64,6 +64,7 @@ namespace Pacco.Services.Orders.Infrastructure
                 .SubscribeCommand<AddParcelToOrder>()
                 .SubscribeCommand<DeleteParcelFromOrder>()
                 .SubscribeCommand<AssignVehicleToOrder>()
+                .SubscribeEvent<CustomerCreated>()
                 .SubscribeEvent<DeliveryCompleted>()
                 .SubscribeEvent<DeliveryFailed>()
                 .SubscribeEvent<DeliveryStarted>()
