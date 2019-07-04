@@ -1,8 +1,8 @@
 @url = http://localhost:5006
-@orderId = a74006d4-35a6-4585-82d8-e2173425164c
-@parcelId = 3a113f84-d659-4eb3-889a-3962590752f8
-@customerId = 8b5bcbc8-b18a-41ef-9f4e-c80e293af0aa
-@vehicleId = 0e3dc60a-77b3-4759-bf0f-360479489034
+@orderId = 00000000-0000-0000-0000-000000000000
+@parcelId = 00000000-0000-0000-0000-000000000000
+@customerId = 00000000-0000-0000-0000-000000000000
+@vehicleId = 00000000-0000-0000-0000-000000000000
 
 ###
 GET {{url}}/orders?customerId={{customerId}}
@@ -12,6 +12,7 @@ GET {{url}}/orders/{{orderId}}
 
 ###
 POST {{url}}/orders
+Content-Type: application/json
 
 {
   "customerId": "{{customerId}}"
@@ -22,6 +23,7 @@ DELETE {{url}}/orders/{{orderId}}
 
 ###
 POST {{url}}/orders/{{orderId}}/parcels
+Content-Type: application/json
 
 {
   "orderId": "{{orderId}}",
@@ -30,6 +32,7 @@ POST {{url}}/orders/{{orderId}}/parcels
 
 ###
 POST {{url}}/orders/{{orderId}}/vehicles
+Content-Type: application/json
 
 {
   "orderId": "{{orderId}}",

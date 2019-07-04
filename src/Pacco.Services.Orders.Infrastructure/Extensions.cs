@@ -47,6 +47,7 @@ namespace Pacco.Services.Orders.Infrastructure
                 .AddRabbitMq()
                 .AddExceptionToMessageMapper<ExceptionToMessageMapper>()
                 .AddMongo()
+                .AddMongoRepository<CustomerDocument, Guid>("Customers")
                 .AddMongoRepository<OrderDocument, Guid>("Orders");
         }
 
