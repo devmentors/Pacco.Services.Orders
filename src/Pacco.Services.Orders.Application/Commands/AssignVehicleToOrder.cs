@@ -7,11 +7,13 @@ namespace Pacco.Services.Orders.Application.Commands
     {
         public Guid OrderId { get; }
         public Guid VehicleId { get; }
+        public Guid? CustomerId { get; }
 
-        public AssignVehicleToOrder(Guid orderId, Guid vehicleId)
+        public AssignVehicleToOrder(Guid orderId, Guid vehicleId, Guid? customerId)
         {
             OrderId = orderId;
             VehicleId = vehicleId;
+            CustomerId = customerId;
         }
     }
 }

@@ -26,6 +26,11 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
             {
                 throw new OrderNotFoundException(command.Id);
             }
+            
+            if (command.CustomerId.HasValue && command.CustomerId != order.CustomerId)
+            {
+                throw new UnauthorizedOrderAccessException(command.Id, command.CustomerId.Value);
+            }
 
             if (!order.CanBeDeleted)
             {

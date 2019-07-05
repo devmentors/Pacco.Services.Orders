@@ -33,6 +33,11 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
             {
                 throw new OrderNotFoundException(command.OrderId);
             }
+            
+            if (command.CustomerId.HasValue && command.CustomerId != order.CustomerId)
+            {
+                throw new UnauthorizedOrderAccessException(command.OrderId, command.CustomerId.Value);
+            }
 
             if (!order.HasParcels)
             {
