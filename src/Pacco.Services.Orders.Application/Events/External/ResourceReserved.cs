@@ -8,12 +8,12 @@ namespace Pacco.Services.Orders.Application.Events.External
     public class ResourceReserved : IEvent
     {
         public Guid Id { get; }
-        public DateTime Date { get; }
+        public DateTime DateTime { get; }
 
-        public ResourceReserved(Guid id, DateTime date)
+        public ResourceReserved(Guid id, DateTime dateTime)
         {
             Id = id;
-            Date = date;
+            DateTime = dateTime;
         }
     }
 }

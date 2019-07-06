@@ -23,10 +23,10 @@ namespace Pacco.Services.Orders.Application.Events.External.Handlers
 
         public async Task HandleAsync(ResourceReserved @event)
         {
-            var order = await _orderRepository.GetAsync(@event.Id, @event.Date);
+            var order = await _orderRepository.GetAsync(@event.Id, @event.DateTime);
             if (order is null)
             {
-                throw new OrderForReservedVehicleNotFoundException(@event.Id, @event.Date);
+                throw new OrderForReservedVehicleNotFoundException(@event.Id, @event.DateTime);
             }
 
             order.Approve();

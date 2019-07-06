@@ -22,7 +22,7 @@ Content-Type: application/json
 DELETE {{url}}/orders/{{orderId}}
 
 ###
-POST {{url}}/orders/{{orderId}}/parcels
+POST {{url}}/orders/{{orderId}}/parcels/{{parcelId}}
 Content-Type: application/json
 
 {
