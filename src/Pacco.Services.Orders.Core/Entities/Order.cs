@@ -33,11 +33,19 @@ namespace Pacco.Services.Orders.Core.Entities
             Status = status;
             CreatedAt = createdAt;
             Parcels = parcels ?? Enumerable.Empty<Parcel>();
-            VehicleId = vehicleId;
-            DeliveryDate = deliveryDate;
+            if (!(vehicleId is null))
+            {
+                SetVehicle(vehicleId.Value);
+            }
+
+            if (!(deliveryDate is null))
+            {
+                SetDeliveryDate(deliveryDate.Value);
+            }
+
             AddEvent(new OrderStateChanged(this));
         }
-        
+
         public void SetTotalPrice(decimal totalPrice)
         {
             if (Status != OrderStatus.New)
@@ -60,7 +68,7 @@ namespace Pacco.Services.Orders.Core.Entities
 
         public void SetDeliveryDate(DateTime deliveryDate)
         {
-            DeliveryDate = deliveryDate;
+            DeliveryDate = deliveryDate.Date;
         }
 
         public bool AddParcel(Parcel parcel)

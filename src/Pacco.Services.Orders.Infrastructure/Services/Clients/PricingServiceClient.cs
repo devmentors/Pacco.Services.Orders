@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Convey.HTTP;
+using Pacco.Services.Orders.Application.DTO;
 using Pacco.Services.Orders.Application.Services.Clients;
 
 namespace Pacco.Services.Orders.Infrastructure.Services.Clients
@@ -16,7 +17,7 @@ namespace Pacco.Services.Orders.Infrastructure.Services.Clients
             _url = options.Services["pricing"];
         }
 
-        public Task<decimal> GetOrderPriceAsync(Guid customerId, decimal orderPrice)
-            => _httpClient.GetAsync<decimal>($"{_url}/pricing?customerId={customerId}&orderPrice={orderPrice}");
+        public Task<OrderPricingDto> GetOrderPriceAsync(Guid customerId, decimal orderPrice)
+            => _httpClient.GetAsync<OrderPricingDto>($"{_url}/pricing?customerId={customerId}&orderPrice={orderPrice}");
     }
 }

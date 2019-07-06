@@ -26,7 +26,8 @@ namespace Pacco.Services.Orders.Infrastructure.Mongo.Repositories
 
         public async Task<Order> GetAsync(Guid vehicleId, DateTime deliveryDate)
         {
-            var order = await _repository.GetAsync(o => o.VehicleId == vehicleId && o.DeliveryDate == deliveryDate);
+            var order = await _repository.GetAsync(o => o.VehicleId == vehicleId &&
+                                                        o.DeliveryDate == deliveryDate.Date);
 
             return order?.AsEntity();
         }

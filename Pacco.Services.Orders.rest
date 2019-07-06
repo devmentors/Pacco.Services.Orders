@@ -3,6 +3,7 @@
 @parcelId = 00000000-0000-0000-0000-000000000000
 @customerId = 00000000-0000-0000-0000-000000000000
 @vehicleId = 00000000-0000-0000-0000-000000000000
+@deliveryDate = 2019-10-10
 
 ###
 GET {{url}}/orders?customerId={{customerId}}
@@ -31,12 +32,13 @@ Content-Type: application/json
 }
 
 ###
-POST {{url}}/orders/{{orderId}}/vehicles
+POST {{url}}/orders/{{orderId}}/vehicles/{{vehicleId}}
 Content-Type: application/json
 
 {
   "orderId": "{{orderId}}",
-  "vehicleId": "{{vehicleId}}"
+  "vehicleId": "{{vehicleId}}",
+  "deliveryDate": "{{deliveryDate}}"
 }
 
 ###

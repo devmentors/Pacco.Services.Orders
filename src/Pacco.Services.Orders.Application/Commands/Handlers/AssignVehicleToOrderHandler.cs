@@ -55,9 +55,10 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
                 throw new VehicleNotFoundException(command.VehicleId);
             }
 
-            var orderPrice = await _pricingServiceClient.GetOrderPriceAsync(order.CustomerId, vehicle.PricePerService);
+            var pricing = await _pricingServiceClient.GetOrderPriceAsync(order.CustomerId, vehicle.PricePerService);
             order.SetVehicle(command.VehicleId);
-            order.SetTotalPrice(orderPrice);
+            order.SetTotalPrice(pricing.OrderDiscountPrice);
+            order.SetDeliveryDate(command.DeliveryDate);
             await _orderRepository.UpdateAsync(order);
             await _messageBroker.PublishAsync(new VehicleAssignedToOrder(command.OrderId, command.VehicleId));
         }

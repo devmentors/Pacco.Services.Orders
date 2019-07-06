@@ -1,10 +1,11 @@
 using System;
 using System.Threading.Tasks;
+using Pacco.Services.Orders.Application.DTO;
 
 namespace Pacco.Services.Orders.Application.Services.Clients
 {
     public interface IPricingServiceClient
     {
-        Task<decimal> GetOrderPriceAsync(Guid customerId, decimal orderPrice);
+        Task<OrderPricingDto> GetOrderPriceAsync(Guid customerId, decimal orderPrice);
     }
 }
