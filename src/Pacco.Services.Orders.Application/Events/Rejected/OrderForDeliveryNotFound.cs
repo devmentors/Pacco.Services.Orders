@@ -1,7 +1,7 @@
 using System;
 using Convey.CQRS.Events;
 
-namespace Pacco.Services.Orders.Application.Events
+namespace Pacco.Services.Orders.Application.Events.Rejected
 {
     public class OrderForDeliveryNotFound : IRejectedEvent
     {
