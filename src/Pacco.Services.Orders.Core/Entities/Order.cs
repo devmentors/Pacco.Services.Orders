@@ -107,7 +107,7 @@ namespace Pacco.Services.Orders.Core.Entities
             Status = OrderStatus.Approved;
             AddEvent(new OrderStateChanged(this));
         }
-        
+
         public void Cancel(string reason)
         {
             if (Status == OrderStatus.Completed || Status == OrderStatus.Canceled)
@@ -117,6 +117,7 @@ namespace Pacco.Services.Orders.Core.Entities
 
             Status = OrderStatus.Canceled;
             CancellationReason = reason;
+            _parcels.Clear();
             AddEvent(new OrderStateChanged(this));
         }
 
