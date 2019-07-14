@@ -1,7 +1,6 @@
 using System;
 using Convey.MessageBrokers.RabbitMQ;
 using Pacco.Services.Orders.Application.Commands;
-using Pacco.Services.Orders.Application.Events;
 using Pacco.Services.Orders.Application.Events.External;
 using Pacco.Services.Orders.Application.Events.Rejected;
 using Pacco.Services.Orders.Application.Exceptions;

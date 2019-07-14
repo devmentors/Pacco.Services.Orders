@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Convey;
+using Convey.Configurations.Vault;
 using Convey.Logging;
+using Convey.Types;
 using Convey.WebApi;
 using Convey.WebApi.CQRS;
 using Microsoft.AspNetCore;
@@ -30,7 +32,7 @@ namespace Pacco.Services.Orders.Api
                 .Configure(app => app
                     .UseInfrastructure()
                     .UseDispatcherEndpoints(endpoints => endpoints
-                        .Get("", ctx => ctx.Response.WriteAsync("Welcome to Pacco Orders Service!"))
+                        .Get("", ctx => ctx.Response.WriteAsync(ctx.RequestServices.GetService<AppOptions>().Name))
                         .Get<GetOrder, OrderDto>("orders/{id}")
                         .Get<GetOrders, IEnumerable<OrderDto>>("orders")
                         .Delete<DeleteOrder>("orders/{id}")
@@ -40,6 +42,7 @@ namespace Pacco.Services.Orders.Api
                         .Delete<DeleteParcelFromOrder>("orders/{orderId}/parcels/{parcelId}")
                         .Post<AssignVehicleToOrder>("orders/{orderId}/vehicles/{vehicleId}")))
                 .UseLogging()
+                .UseVault()
                 .Build()
                 .RunAsync();
     }
