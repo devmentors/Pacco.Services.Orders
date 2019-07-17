@@ -30,14 +30,14 @@ namespace Pacco.Services.Orders.PactConsumerTests.PACT
                     Status = 200,
                     Headers = new Dictionary<string, object>
                     {
-                        { "Content-Type", "application/json; charset=utf-8" }
+                        { "Content-Type", "application/json" }
                     },
                     Body = new ParcelDto
                     {
                         Id = new Guid(ParcelId),
                         Name = "Product",
-                        Size = "Huge",
-                        Variant = "Weapon"
+                        Size = "huge",
+                        Variant = "weapon"
                     }
                 });
 
