@@ -7,12 +7,12 @@ namespace Pacco.Services.Orders.Application.Events.External
     [MessageNamespace("availability")]
     public class ResourceReserved : IEvent
     {
-        public Guid Id { get; }
+        public Guid ResourceId { get; }
         public DateTime DateTime { get; }
 
-        public ResourceReserved(Guid id, DateTime dateTime)
+        public ResourceReserved(Guid resourceId, DateTime dateTime)
         {
-            Id = id;
+            ResourceId = resourceId;
             DateTime = dateTime;
         }
     }

@@ -6,12 +6,12 @@ namespace Pacco.Services.Orders.Application.Events
     [Contract]
     public class OrderCanceled : IEvent
     {
-        public Guid Id { get; }
+        public Guid OrderId { get; }
         public string Reason { get; }
 
-        public OrderCanceled(Guid id, string reason)
+        public OrderCanceled(Guid orderId, string reason)
         {
-            Id = id;
+            OrderId = orderId;
             Reason = reason;
         }
     }

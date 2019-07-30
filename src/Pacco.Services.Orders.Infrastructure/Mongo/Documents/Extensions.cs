@@ -9,7 +9,7 @@ namespace Pacco.Services.Orders.Infrastructure.Mongo.Documents
         public static Order AsEntity(this OrderDocument document)
             => new Order(document.Id, document.CustomerId, document.Status, document.CreatedAt,
                 document.Parcels.Select(p => new Parcel(p.Id, p.Name, p.Variant, p.Size)),
-                document.VehicleId, document.DeliveryDate);
+                document.VehicleId, document.DeliveryDate, document.TotalPrice);
 
         public static OrderDocument AsDocument(this Order entity)
             => new OrderDocument

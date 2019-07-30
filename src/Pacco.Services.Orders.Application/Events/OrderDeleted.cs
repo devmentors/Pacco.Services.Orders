@@ -6,11 +6,11 @@ namespace Pacco.Services.Orders.Application.Events
     [Contract]
     public class OrderDeleted : IEvent
     {
-        public Guid Id { get; }
+        public Guid OrderId { get; }
 
-        public OrderDeleted(Guid id)
+        public OrderDeleted(Guid orderId)
         {
-            Id = id;
+            OrderId = orderId;
         }
     }
 }

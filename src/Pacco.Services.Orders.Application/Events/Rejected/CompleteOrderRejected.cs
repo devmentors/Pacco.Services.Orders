@@ -6,13 +6,13 @@ namespace Pacco.Services.Orders.Application.Events.Rejected
     [Contract]
     public class CompleteOrderRejected : IRejectedEvent
     {
-        public Guid Id { get; }
+        public Guid OrderId { get; }
         public string Reason { get; }
         public string Code { get; }
 
-        public CompleteOrderRejected(Guid id, string reason, string code)
+        public CompleteOrderRejected(Guid orderId, string reason, string code)
         {
-            Id = id;
+            OrderId = orderId;
             Reason = reason;
             Code = code;
         }

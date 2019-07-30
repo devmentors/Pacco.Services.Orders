@@ -7,10 +7,12 @@ namespace Pacco.Services.Orders.Application.Events.External
     [MessageNamespace("deliveries")]
     public class DeliveryCompleted : IEvent
     {
+        public Guid DeliveryId { get; }
         public Guid OrderId { get; }
 
-        public DeliveryCompleted(Guid orderId)
+        public DeliveryCompleted(Guid deliveryId, Guid orderId)
         {
+            DeliveryId = deliveryId;
             OrderId = orderId;
         }
     }

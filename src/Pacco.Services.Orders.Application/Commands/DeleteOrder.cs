@@ -6,12 +6,12 @@ namespace Pacco.Services.Orders.Application.Commands
     [Contract]
     public class DeleteOrder : ICommand
     {
-        public Guid Id { get; }
+        public Guid OrderId { get; }
         public Guid? CustomerId { get; }
 
-        public DeleteOrder(Guid id, Guid? customerId)
+        public DeleteOrder(Guid orderId, Guid? customerId)
         {
-            Id = id;
+            OrderId = orderId;
             CustomerId = customerId;
         }
     }

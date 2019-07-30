@@ -23,10 +23,10 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
 
         public async Task HandleAsync(ApproveOrder command)
         {
-            var order = await _orderRepository.GetAsync(command.Id);
+            var order = await _orderRepository.GetAsync(command.OrderId);
             if (order is null)
             {
-                throw new OrderNotFoundException(command.Id);
+                throw new OrderNotFoundException(command.OrderId);
             }
 
             order.Approve();

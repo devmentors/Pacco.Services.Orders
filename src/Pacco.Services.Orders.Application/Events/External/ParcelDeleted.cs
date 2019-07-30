@@ -7,11 +7,11 @@ namespace Pacco.Services.Orders.Application.Events.External
     [MessageNamespace("deliveries")]
     public class ParcelDeleted : IEvent
     {
-        public Guid Id { get; }
+        public Guid ParcelId { get; }
 
-        public ParcelDeleted(Guid id)
+        public ParcelDeleted(Guid parcelId)
         {
-            Id = id;
+            ParcelId = parcelId;
         }
     }
 }

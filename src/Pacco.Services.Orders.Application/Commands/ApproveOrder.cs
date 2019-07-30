@@ -6,11 +6,11 @@ namespace Pacco.Services.Orders.Application.Commands
     [Contract]
     public class ApproveOrder : ICommand
     {
-        public Guid Id { get; }
+        public Guid OrderId { get; }
 
-        public ApproveOrder(Guid id)
+        public ApproveOrder(Guid orderId)
         {
-            Id = id;
+            OrderId = orderId;
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Pacco.Services.Orders.Infrastructure.Mongo.Queries.Handlers
 
         public async Task<OrderDto> HandleAsync(GetOrder query)
         {
-            var document = await _orderRepository.GetAsync(p => p.Id == query.Id);
+            var document = await _orderRepository.GetAsync(p => p.Id == query.OrderId);
 
             return document?.AsDto();
         }

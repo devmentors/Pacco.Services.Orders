@@ -33,11 +33,11 @@ namespace Pacco.Services.Orders.Api
                     .UseInfrastructure()
                     .UseDispatcherEndpoints(endpoints => endpoints
                         .Get("", ctx => ctx.Response.WriteAsync(ctx.RequestServices.GetService<AppOptions>().Name))
-                        .Get<GetOrder, OrderDto>("orders/{id}")
+                        .Get<GetOrder, OrderDto>("orders/{orderId}")
                         .Get<GetOrders, IEnumerable<OrderDto>>("orders")
-                        .Delete<DeleteOrder>("orders/{id}")
+                        .Delete<DeleteOrder>("orders/{orderId}")
                         .Post<CreateOrder>("orders",
-                            afterDispatch: (cmd, ctx) => ctx.Response.Created($"orders/{cmd.Id}"))
+                            afterDispatch: (cmd, ctx) => ctx.Response.Created($"orders/{cmd.OrderId}"))
                         .Post<AddParcelToOrder>("orders/{orderId}/parcels/{parcelId}")
                         .Delete<DeleteParcelFromOrder>("orders/{orderId}/parcels/{parcelId}")
                         .Post<AssignVehicleToOrder>("orders/{orderId}/vehicles/{vehicleId}")))

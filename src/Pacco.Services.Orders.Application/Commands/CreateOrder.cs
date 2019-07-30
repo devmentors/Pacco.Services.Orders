@@ -6,12 +6,12 @@ namespace Pacco.Services.Orders.Application.Commands
     [Contract]
     public class CreateOrder : ICommand
     {
-        public Guid Id { get; }
+        public Guid OrderId { get; }
         public Guid CustomerId { get; }
 
-        public CreateOrder(Guid id, Guid customerId)
+        public CreateOrder(Guid orderId, Guid customerId)
         {
-            Id = id == Guid.Empty ? Guid.NewGuid() : id;
+            OrderId = orderId == Guid.Empty ? Guid.NewGuid() : orderId;
             CustomerId = customerId;
         }
     }

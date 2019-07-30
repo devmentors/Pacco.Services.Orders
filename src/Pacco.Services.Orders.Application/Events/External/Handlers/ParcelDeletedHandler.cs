@@ -22,13 +22,13 @@ namespace Pacco.Services.Orders.Application.Events.External.Handlers
 
         public async Task HandleAsync(ParcelDeleted @event)
         {
-            var order = await _orderRepository.GetContainingParcelAsync(@event.Id);
+            var order = await _orderRepository.GetContainingParcelAsync(@event.ParcelId);
             if (order is null)
             {
                 return;
             }
 
-            order.DeleteParcel(@event.Id);
+            order.DeleteParcel(@event.ParcelId);
             await _orderRepository.UpdateAsync(order);
             var events = _eventMapper.MapAll(order.Events);
             await _messageBroker.PublishAsync(events.ToArray());

@@ -26,11 +26,11 @@ namespace Pacco.Services.Orders.Infrastructure.Exceptions
                     {
                         case AddParcelToOrder m:
                             return new AddParcelToOrderRejected(m.OrderId, m.ParcelId, ex.Message, ex.Code);
-                        case ApproveOrder m: return new ApproveOrderRejected(m.Id, ex.Message, ex.Code);
+                        case ApproveOrder m: return new ApproveOrderRejected(m.OrderId, ex.Message, ex.Code);
                         case AssignVehicleToOrder m:
                             return new AssignVehicleToOrderRejected(m.OrderId, m.VehicleId, ex.Message, ex.Code);
-                        case CancelOrder m: return new CancelOrderRejected(m.Id, ex.Message, ex.Code);
-                        case DeleteOrder m: return new DeleteOrderRejected(m.Id, ex.Message, ex.Code);
+                        case CancelOrder m: return new CancelOrderRejected(m.OrderId, ex.Message, ex.Code);
+                        case DeleteOrder m: return new DeleteOrderRejected(m.OrderId, ex.Message, ex.Code);
                         case DeleteParcelFromOrder m:
                             return new DeleteParcelFromOrderRejected(m.OrderId, m.ParcelId, ex.Message, ex.Code);
                         case DeliveryCompleted _: return new OrderForDeliveryNotFound(ex.Id, ex.Message, ex.Code);
@@ -68,7 +68,7 @@ namespace Pacco.Services.Orders.Infrastructure.Exceptions
                             return new AddParcelToOrderRejected(m.OrderId, m.ParcelId, ex.Message, ex.Code);
                         case AssignVehicleToOrder m:
                             return new AssignVehicleToOrderRejected(m.OrderId, m.VehicleId, ex.Message, ex.Code);
-                        case DeleteOrder m: return new DeleteOrderRejected(m.Id, ex.Message, ex.Code);
+                        case DeleteOrder m: return new DeleteOrderRejected(m.OrderId, ex.Message, ex.Code);
                         case DeleteParcelFromOrder m:
                             return new DeleteParcelFromOrderRejected(m.OrderId, m.ParcelId, ex.Message, ex.Code);
                     }

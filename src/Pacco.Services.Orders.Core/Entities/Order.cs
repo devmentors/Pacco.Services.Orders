@@ -26,7 +26,8 @@ namespace Pacco.Services.Orders.Core.Entities
         }
 
         public Order(AggregateId id, Guid customerId, OrderStatus status, DateTime createdAt,
-            IEnumerable<Parcel> parcels = null, Guid? vehicleId = null, DateTime? deliveryDate = null)
+            IEnumerable<Parcel> parcels = null, Guid? vehicleId = null, DateTime? deliveryDate = null,
+            decimal totalPrice = 0)
         {
             Id = id;
             CustomerId = customerId;
@@ -41,6 +42,11 @@ namespace Pacco.Services.Orders.Core.Entities
             if (!(deliveryDate is null))
             {
                 SetDeliveryDate(deliveryDate.Value);
+            }
+
+            if (totalPrice > 0)
+            {
+                SetTotalPrice(totalPrice);
             }
 
             AddEvent(new OrderStateChanged(this));

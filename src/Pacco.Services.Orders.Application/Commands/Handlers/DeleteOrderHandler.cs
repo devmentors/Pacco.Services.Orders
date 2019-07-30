@@ -21,24 +21,24 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
 
         public async Task HandleAsync(DeleteOrder command)
         {
-            var order = await _orderRepository.GetAsync(command.Id);
+            var order = await _orderRepository.GetAsync(command.OrderId);
             if (order is null)
             {
-                throw new OrderNotFoundException(command.Id);
+                throw new OrderNotFoundException(command.OrderId);
             }
             
             if (command.CustomerId.HasValue && command.CustomerId != order.CustomerId)
             {
-                throw new UnauthorizedOrderAccessException(command.Id, command.CustomerId.Value);
+                throw new UnauthorizedOrderAccessException(command.OrderId, command.CustomerId.Value);
             }
 
             if (!order.CanBeDeleted)
             {
-                throw new CannotDeleteOrderException(command.Id);
+                throw new CannotDeleteOrderException(command.OrderId);
             }
 
-            await _orderRepository.DeleteAsync(command.Id);
-            await _messageBroker.PublishAsync(new OrderDeleted(command.Id));
+            await _orderRepository.DeleteAsync(command.OrderId);
+            await _messageBroker.PublishAsync(new OrderDeleted(command.OrderId));
         }
     }
 }

@@ -5,13 +5,13 @@ namespace Pacco.Services.Orders.Application.Events.Rejected
 {
     public class OrderForDeliveryNotFound : IRejectedEvent
     {
-        public Guid Id { get; }
+        public Guid OrderId { get; }
         public string Reason { get; }
         public string Code { get; }
 
-        public OrderForDeliveryNotFound(Guid id, string reason, string code)
+        public OrderForDeliveryNotFound(Guid orderId, string reason, string code)
         {
-            Id = id;
+            OrderId = orderId;
             Reason = reason;
             Code = code;
         }
