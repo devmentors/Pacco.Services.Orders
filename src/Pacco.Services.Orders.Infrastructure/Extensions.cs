@@ -20,6 +20,7 @@ using Pacco.Services.Orders.Application.Events.External;
 using Pacco.Services.Orders.Application.Services;
 using Pacco.Services.Orders.Application.Services.Clients;
 using Pacco.Services.Orders.Core.Repositories;
+using Pacco.Services.Orders.Infrastructure.Contexts;
 using Pacco.Services.Orders.Infrastructure.Exceptions;
 using Pacco.Services.Orders.Infrastructure.Mongo.Documents;
 using Pacco.Services.Orders.Infrastructure.Mongo.Repositories;
@@ -40,6 +41,8 @@ namespace Pacco.Services.Orders.Infrastructure
             builder.Services.AddTransient<IParcelsServiceClient, ParcelsServiceClient>();
             builder.Services.AddTransient<IPricingServiceClient, PricingServiceClient>();
             builder.Services.AddTransient<IVehiclesServiceClient, VehiclesServiceClient>();
+            builder.Services.AddTransient<IAppContextFactory, AppContextFactory>();
+            builder.Services.AddTransient(ctx => ctx.GetRequiredService<IAppContextFactory>().Create());
 
             return builder
                 .AddQueryHandlers()

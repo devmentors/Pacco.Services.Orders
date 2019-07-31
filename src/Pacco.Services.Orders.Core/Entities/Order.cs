@@ -44,11 +44,7 @@ namespace Pacco.Services.Orders.Core.Entities
                 SetDeliveryDate(deliveryDate.Value);
             }
 
-            if (totalPrice > 0)
-            {
-                SetTotalPrice(totalPrice);
-            }
-
+            TotalPrice = totalPrice;
             AddEvent(new OrderStateChanged(this));
         }
 
