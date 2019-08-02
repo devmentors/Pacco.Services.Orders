@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Convey;
 using Convey.CQRS.Queries;
 using Convey.Discovery.Consul;
@@ -13,7 +14,9 @@ using Convey.Tracing.Jaeger.RabbitMQ;
 using Convey.WebApi;
 using Convey.WebApi.CQRS;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Pacco.Services.Orders.Application;
 using Pacco.Services.Orders.Application.Commands;
 using Pacco.Services.Orders.Application.Events.External;
@@ -85,5 +88,10 @@ namespace Pacco.Services.Orders.Infrastructure
 
             return app;
         }
+
+        internal static CorrelationContext GetCorrelationContext(this IHttpContextAccessor accessor)
+            => accessor.HttpContext.Request.Headers.TryGetValue("Correlation-Context", out var json)
+                ? JsonConvert.DeserializeObject<CorrelationContext>(json.FirstOrDefault())
+                : null;
     }
 }
