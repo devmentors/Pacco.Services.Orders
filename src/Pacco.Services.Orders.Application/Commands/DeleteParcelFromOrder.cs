@@ -8,13 +8,11 @@ namespace Pacco.Services.Orders.Application.Commands
     {
         public Guid OrderId { get; }
         public Guid ParcelId { get; }
-        public Guid? CustomerId { get; }
 
-        public DeleteParcelFromOrder(Guid orderId, Guid parcelId, Guid? customerId)
+        public DeleteParcelFromOrder(Guid orderId, Guid parcelId)
         {
             OrderId = orderId;
             ParcelId = parcelId;
-            CustomerId = customerId;
         }
     }
 }
