@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Convey.CQRS.Commands;
-using Microsoft.Extensions.Logging;
 using Pacco.Services.Orders.Application.Events;
 using Pacco.Services.Orders.Application.Exceptions;
 using Pacco.Services.Orders.Application.Services;
@@ -17,18 +16,16 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
         private readonly IVehiclesServiceClient _vehiclesServiceClient;
         private readonly IMessageBroker _messageBroker;
         private readonly IAppContext _appContext;
-        private readonly ILogger<AssignVehicleToOrderHandler> _logger;
 
         public AssignVehicleToOrderHandler(IOrderRepository orderRepository,
             IPricingServiceClient pricingServiceClient, IVehiclesServiceClient vehiclesServiceClient,
-            IMessageBroker messageBroker, IAppContext appContext, ILogger<AssignVehicleToOrderHandler> logger)
+            IMessageBroker messageBroker, IAppContext appContext)
         {
             _orderRepository = orderRepository;
             _pricingServiceClient = pricingServiceClient;
             _vehiclesServiceClient = vehiclesServiceClient;
             _messageBroker = messageBroker;
             _appContext = appContext;
-            _logger = logger;
         }
 
         public async Task HandleAsync(AssignVehicleToOrder command)
@@ -42,8 +39,6 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
             var identity = _appContext.Identity;
             if (identity.IsAuthenticated && identity.Id != order.CustomerId && !identity.IsAdmin)
             {
-                _logger.LogWarning($"Customer with id: {identity.Id} tried to assign a vehicle to the order " +
-                                   $"with id: {order.Id} without the proper access rights.");
                 throw new UnauthorizedOrderAccessException(command.OrderId, identity.Id);
             }
 
@@ -62,17 +57,13 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
             {
                 throw new VehicleNotFoundException(command.VehicleId);
             }
-
-            _logger.LogInformation($"Fetching an order pricing for customer: {order.CustomerId} and " +
-                                   $"service price: {vehicle.PricePerService}");
+            
             var pricing = await _pricingServiceClient.GetOrderPriceAsync(order.CustomerId, vehicle.PricePerService);
-            _logger.LogInformation($"Received an order pricing: {pricing.OrderDiscountPrice}");
             order.SetVehicle(command.VehicleId);
             order.SetTotalPrice(pricing.OrderDiscountPrice);
             order.SetDeliveryDate(command.DeliveryDate);
             await _orderRepository.UpdateAsync(order);
             await _messageBroker.PublishAsync(new VehicleAssignedToOrder(command.OrderId, command.VehicleId));
-            _logger.LogInformation($"Assigned a vehicle with id: {command.VehicleId} to the order with id: {order.Id}.");
         }
     }
 }
