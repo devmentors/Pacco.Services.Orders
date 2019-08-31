@@ -5,7 +5,7 @@ namespace Pacco.Services.Orders.Application.Exceptions
 {
     public class ParcelAlreadyDeletedFromOrderException : ExceptionBase
     {
-        public override string Code => "parcel_already_added_to_order";
+        public override string Code => "parcel_already_deleted_from_order";
         public Guid OrderId { get; }
         public Guid ParcelId { get; }
 

@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Convey.CQRS.Events;
-using Microsoft.Extensions.Logging;
 using Pacco.Services.Orders.Application.Exceptions;
 using Pacco.Services.Orders.Application.Services;
 using Pacco.Services.Orders.Core.Repositories;
@@ -13,15 +12,13 @@ namespace Pacco.Services.Orders.Application.Events.External.Handlers
         private readonly IOrderRepository _orderRepository;
         private readonly IMessageBroker _messageBroker;
         private readonly IEventMapper _eventMapper;
-        private readonly ILogger<ResourceReservationCanceled> _logger;
 
         public ResourceReservationCanceledHandler(IOrderRepository orderRepository, IMessageBroker messageBroker,
-            IEventMapper eventMapper, ILogger<ResourceReservationCanceled> logger)
+            IEventMapper eventMapper)
         {
             _orderRepository = orderRepository;
             _messageBroker = messageBroker;
             _eventMapper = eventMapper;
-            _logger = logger;
         }
 
         public async Task HandleAsync(ResourceReservationCanceled @event)
@@ -36,8 +33,6 @@ namespace Pacco.Services.Orders.Application.Events.External.Handlers
             await _orderRepository.UpdateAsync(order);
             var events = _eventMapper.MapAll(order.Events);
             await _messageBroker.PublishAsync(events.ToArray());
-            _logger.LogInformation($"Reservation for the resource with id: {@event.ResourceId}, date: " +
-                                   $"{@event.DateTime} has been canceled. Order with id: {order.Id} has been canceled.");
         }
     }
 }
