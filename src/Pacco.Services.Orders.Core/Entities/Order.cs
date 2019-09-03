@@ -45,7 +45,14 @@ namespace Pacco.Services.Orders.Core.Entities
             }
 
             TotalPrice = totalPrice;
-            AddEvent(new OrderStateChanged(this));
+        }
+
+        public static Order Create(AggregateId id, Guid customerId, OrderStatus status, DateTime createdAt)
+        {
+            var order = new Order(id, customerId, status, createdAt);
+            order.AddEvent(new OrderStateChanged(order));
+
+            return order;
         }
 
         public void SetTotalPrice(decimal totalPrice)

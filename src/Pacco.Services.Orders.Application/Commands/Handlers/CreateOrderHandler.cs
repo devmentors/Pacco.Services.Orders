@@ -33,7 +33,7 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
                 throw new CustomerNotFoundException(command.CustomerId);
             }
 
-            var order = new Order(command.OrderId, command.CustomerId, OrderStatus.New, _dateTimeProvider.Now);
+            var order = Order.Create(command.OrderId, command.CustomerId, OrderStatus.New, _dateTimeProvider.Now);
             await _orderRepository.AddAsync(order);
             var events = _eventMapper.MapAll(order.Events);
             await _messageBroker.PublishAsync(events.ToArray());
