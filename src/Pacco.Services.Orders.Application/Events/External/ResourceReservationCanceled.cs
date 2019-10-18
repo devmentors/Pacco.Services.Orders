@@ -4,7 +4,7 @@ using Convey.MessageBrokers;
 
 namespace Pacco.Services.Orders.Application.Events.External
 {
-    [MessageNamespace("availability")]
+    [Message("availability")]
     public class ResourceReservationCanceled : IEvent
     {
         public Guid ResourceId { get; }

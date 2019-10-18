@@ -4,7 +4,7 @@ using Convey.MessageBrokers;
 
 namespace Pacco.Services.Orders.Application.Events.External
 {
-    [MessageNamespace("customers")]
+    [Message("customers")]
     public class CustomerCreated : IEvent
     {
         public Guid CustomerId { get; }
