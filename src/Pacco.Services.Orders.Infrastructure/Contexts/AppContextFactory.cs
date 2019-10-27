@@ -1,5 +1,6 @@
 using Convey.MessageBrokers;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using Pacco.Services.Orders.Application;
 
 namespace Pacco.Services.Orders.Infrastructure.Contexts
@@ -19,11 +20,15 @@ namespace Pacco.Services.Orders.Infrastructure.Contexts
         {
             if (!(_contextAccessor.CorrelationContext is null))
             {
-                return new AppContext(_contextAccessor.CorrelationContext as CorrelationContext);
+                var payload = JsonConvert.SerializeObject(_contextAccessor.CorrelationContext);
+
+                return string.IsNullOrWhiteSpace(payload)
+                    ? AppContext.Empty
+                    : new AppContext(JsonConvert.DeserializeObject<CorrelationContext>(payload));
             }
 
             var context = _httpContextAccessor.GetCorrelationContext();
-            
+
             return context is null ? AppContext.Empty : new AppContext(context);
         }
     }
