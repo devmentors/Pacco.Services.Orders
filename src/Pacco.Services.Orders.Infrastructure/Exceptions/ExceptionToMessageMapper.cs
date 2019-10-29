@@ -1,4 +1,5 @@
 using System;
+using Convey.CQRS.Events;
 using Convey.MessageBrokers.RabbitMQ;
 using Pacco.Services.Orders.Application.Commands;
 using Pacco.Services.Orders.Application.Events.External;
@@ -11,80 +12,68 @@ namespace Pacco.Services.Orders.Infrastructure.Exceptions
     public class ExceptionToMessageMapper : IExceptionToMessageMapper
     {
         public object Map(Exception exception, object message)
-        {
-            switch (exception)
+            => exception switch
             {
-                case CannotDeleteOrderException ex: return new DeleteOrderRejected(ex.Id, ex.Message, ex.Code);
+                CannotDeleteOrderException ex => (object) new DeleteOrderRejected(ex.Id, ex.Message, ex.Code),
+                CustomerNotFoundException ex => new CreateOrderRejected(ex.Id, ex.Message, ex.Code),
+                OrderForReservedVehicleNotFoundException ex => new OrderForReservedVehicleNotFound(ex.VehicleId,
+                    ex.Date, ex.Message, ex.Code),
 
-                case CustomerNotFoundException ex: return new CreateOrderRejected(ex.Id, ex.Message, ex.Code);
-
-                case OrderForReservedVehicleNotFoundException ex:
-                    return new OrderForReservedVehicleNotFound(ex.VehicleId, ex.Date, ex.Message, ex.Code);
-
-                case OrderNotFoundException ex:
-                    switch (message)
+                OrderNotFoundException ex
+                    => message switch
                     {
-                        case AddParcelToOrder m:
-                            return new AddParcelToOrderRejected(m.OrderId, m.ParcelId, ex.Message, ex.Code);
-                        case ApproveOrder m: return new ApproveOrderRejected(m.OrderId, ex.Message, ex.Code);
-                        case AssignVehicleToOrder m:
-                            return new AssignVehicleToOrderRejected(m.OrderId, m.VehicleId, ex.Message, ex.Code);
-                        case CancelOrder m: return new CancelOrderRejected(m.OrderId, ex.Message, ex.Code);
-                        case DeleteOrder m: return new DeleteOrderRejected(m.OrderId, ex.Message, ex.Code);
-                        case DeleteParcelFromOrder m:
-                            return new DeleteParcelFromOrderRejected(m.OrderId, m.ParcelId, ex.Message, ex.Code);
-                        case DeliveryCompleted _: return new OrderForDeliveryNotFound(ex.Id, ex.Message, ex.Code);
-                        case DeliveryFailed _: return new OrderForDeliveryNotFound(ex.Id, ex.Message, ex.Code);
-                        case DeliveryStarted _: return new OrderForDeliveryNotFound(ex.Id, ex.Message, ex.Code);
-                    }
+                        AddParcelToOrder m => (object) new AddParcelToOrderRejected(m.OrderId, m.ParcelId, ex.Message,
+                            ex.Code),
+                        ApproveOrder m => new ApproveOrderRejected(m.OrderId, ex.Message, ex.Code),
+                        AssignVehicleToOrder m => new AssignVehicleToOrderRejected(m.OrderId, m.VehicleId, ex.Message,
+                            ex.Code),
+                        CancelOrder m => new CancelOrderRejected(m.OrderId, ex.Message, ex.Code),
+                        DeleteOrder m => new DeleteOrderRejected(m.OrderId, ex.Message, ex.Code),
+                        DeleteParcelFromOrder m => new DeleteParcelFromOrderRejected(m.OrderId, m.ParcelId, ex.Message,
+                            ex.Code),
+                        DeliveryCompleted _ => new OrderForDeliveryNotFound(ex.Id, ex.Message, ex.Code),
+                        DeliveryFailed _ => new OrderForDeliveryNotFound(ex.Id, ex.Message, ex.Code),
+                        DeliveryStarted _ => new OrderForDeliveryNotFound(ex.Id, ex.Message, ex.Code),
+                        _ => null
+                    },
 
-                    break;
-
-                case OrderHasNoParcelsException ex:
-                    switch (message)
+                OrderHasNoParcelsException ex
+                    => message switch
                     {
-                        case AddParcelToOrder m:
-                            return new AssignVehicleToOrderRejected(m.OrderId, m.ParcelId, ex.Message, ex.Code);
-                    }
+                        AddParcelToOrder m => new AssignVehicleToOrderRejected(m.OrderId, m.ParcelId, ex.Message, ex.Code),
+                        _ => null
+                    },
 
-                    break;
-
-                case ParcelNotFoundException ex:
-                    switch (message)
+                ParcelNotFoundException ex
+                    => message switch
                     {
-                        case AddParcelToOrder m:
-                            return new AddParcelToOrderRejected(m.OrderId, m.ParcelId, ex.Message, ex.Code);
-                    }
+                        AddParcelToOrder m => new AddParcelToOrderRejected(m.OrderId, m.ParcelId, ex.Message, ex.Code),
+                        _ => null
+                    },
 
-                    break;
+                ParcelAlreadyAddedToOrderException ex => new AddParcelToOrderRejected(ex.OrderId, ex.ParcelId,
+                    ex.Message, ex.Code),
 
-                case ParcelAlreadyAddedToOrderException ex:
-                    return new AddParcelToOrderRejected(ex.OrderId, ex.ParcelId, ex.Message, ex.Code);
-
-                case UnauthorizedOrderAccessException ex:
-                    switch (message)
+                UnauthorizedOrderAccessException ex
+                    => message switch
                     {
-                        case AddParcelToOrder m:
-                            return new AddParcelToOrderRejected(m.OrderId, m.ParcelId, ex.Message, ex.Code);
-                        case AssignVehicleToOrder m:
-                            return new AssignVehicleToOrderRejected(m.OrderId, m.VehicleId, ex.Message, ex.Code);
-                        case DeleteOrder m: return new DeleteOrderRejected(m.OrderId, ex.Message, ex.Code);
-                        case DeleteParcelFromOrder m:
-                            return new DeleteParcelFromOrderRejected(m.OrderId, m.ParcelId, ex.Message, ex.Code);
-                    }
-
-                    break;
-                case VehicleNotFoundException ex:
-                    switch (message)
+                        AddParcelToOrder m => (object) new AddParcelToOrderRejected(m.OrderId, m.ParcelId, ex.Message,
+                            ex.Code),
+                        AssignVehicleToOrder m => new AssignVehicleToOrderRejected(m.OrderId, m.VehicleId, ex.Message,
+                            ex.Code),
+                        DeleteOrder m => new DeleteOrderRejected(m.OrderId, ex.Message, ex.Code),
+                        DeleteParcelFromOrder m => new DeleteParcelFromOrderRejected(m.OrderId, m.ParcelId, ex.Message,
+                            ex.Code),
+                        _ => null
+                    },
+                VehicleNotFoundException ex
+                    => message switch
                     {
-                        case AssignVehicleToOrder m:
-                            return new AssignVehicleToOrderRejected(m.OrderId, m.VehicleId, ex.Message, ex.Code);
-                    }
-
-                    break;
-            }
-
-            return null;
-        }
+                        AssignVehicleToOrder m => new AssignVehicleToOrderRejected(m.OrderId, m.VehicleId, ex.Message,
+                            ex.Code),
+                        _ => null,
+                    }, 
+                _ => null,
+            };
     }
 }
