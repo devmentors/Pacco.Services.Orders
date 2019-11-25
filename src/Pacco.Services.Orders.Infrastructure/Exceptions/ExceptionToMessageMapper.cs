@@ -1,5 +1,4 @@
 using System;
-using Convey.CQRS.Events;
 using Convey.MessageBrokers.RabbitMQ;
 using Pacco.Services.Orders.Application.Commands;
 using Pacco.Services.Orders.Application.Events.External;
