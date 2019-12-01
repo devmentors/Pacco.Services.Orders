@@ -1,12 +1,18 @@
 using System;
 using System.Linq;
+using System.Text;
 using Convey;
+using Convey.CQRS.Commands;
+using Convey.CQRS.Events;
 using Convey.CQRS.Queries;
 using Convey.Discovery.Consul;
 using Convey.Docs.Swagger;
 using Convey.HTTP;
 using Convey.LoadBalancing.Fabio;
+using Convey.MessageBrokers;
 using Convey.MessageBrokers.CQRS;
+using Convey.MessageBrokers.Inbox;
+using Convey.MessageBrokers.Outbox;
 using Convey.MessageBrokers.RabbitMQ;
 using Convey.Metrics.AppMetrics;
 using Convey.Persistence.MongoDB;
@@ -27,6 +33,7 @@ using Pacco.Services.Orders.Application.Services;
 using Pacco.Services.Orders.Application.Services.Clients;
 using Pacco.Services.Orders.Core.Repositories;
 using Pacco.Services.Orders.Infrastructure.Contexts;
+using Pacco.Services.Orders.Infrastructure.Decorators;
 using Pacco.Services.Orders.Infrastructure.Exceptions;
 using Pacco.Services.Orders.Infrastructure.Logging;
 using Pacco.Services.Orders.Infrastructure.Mongo.Documents;
@@ -51,6 +58,8 @@ namespace Pacco.Services.Orders.Infrastructure
             builder.Services.AddTransient<IVehiclesServiceClient, VehiclesServiceClient>();
             builder.Services.AddTransient<IAppContextFactory, AppContextFactory>();
             builder.Services.AddTransient(ctx => ctx.GetRequiredService<IAppContextFactory>().Create());
+            builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(InboxCommandHandlerDecorator<>));
+            builder.Services.TryDecorate(typeof(IEventHandler<>), typeof(InboxEventHandlerDecorator<>));
 
             return builder
                 .AddQueryHandlers()
@@ -59,6 +68,8 @@ namespace Pacco.Services.Orders.Infrastructure
                 .AddConsul()
                 .AddFabio()
                 .AddRabbitMq(plugins: p => p.AddJaegerRabbitMqPlugin())
+                .AddMessageInbox()
+                .AddMessageOutbox()
                 .AddExceptionToMessageMapper<ExceptionToMessageMapper>()
                 .AddMongo()
                 .AddRedis()
@@ -101,5 +112,20 @@ namespace Pacco.Services.Orders.Infrastructure
             => accessor.HttpContext?.Request.Headers.TryGetValue("Correlation-Context", out var json) is true
                 ? JsonConvert.DeserializeObject<CorrelationContext>(json.FirstOrDefault())
                 : null;
+        
+        internal static string GetSpanContext(this IMessageProperties messageProperties, string header)
+        {
+            if (messageProperties is null)
+            {
+                return string.Empty;
+            }
+
+            if (messageProperties.Headers.TryGetValue(header, out var span) && span is byte[] spanBytes)
+            {
+                return Encoding.UTF8.GetString(spanBytes);
+            }
+
+            return string.Empty;
+        }
     }
 }
