@@ -75,8 +75,8 @@ namespace Pacco.Services.Orders.Infrastructure
                 .AddMetrics()
                 .AddJaeger()
                 .AddHandlersLogging()
-                .AddMongoRepository<CustomerDocument, Guid>("Customers")
-                .AddMongoRepository<OrderDocument, Guid>("Orders")
+                .AddMongoRepository<CustomerDocument, Guid>("customers")
+                .AddMongoRepository<OrderDocument, Guid>("orders")
                 .AddWebApiSwaggerDocs();
         }
 

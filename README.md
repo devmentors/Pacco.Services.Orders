@@ -29,3 +29,9 @@ You can also start the service via Docker, either by building a local Dockerfile
 or using the official one: 
 
 `docker pull devmentors/pacco.services.orders`
+
+**What HTTP requests can be sent to the microservice API?**
+----------------
+
+You can find the list of all HTTP requests in [Pacco.Services.Orders.rest](https://github.com/devmentors/Pacco.Services.Orders/blob/master/Pacco.Services.Orders.rest) file placed in the root folder of the repository.
+This file is compatible with [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) plugin for [Visual Studio Code](https://code.visualstudio.com). 
