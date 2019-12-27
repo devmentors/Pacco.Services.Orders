@@ -4,7 +4,6 @@ using Pacco.Services.Orders.Application.Events;
 using Pacco.Services.Orders.Application.Exceptions;
 using Pacco.Services.Orders.Application.Services;
 using Pacco.Services.Orders.Application.Services.Clients;
-using Pacco.Services.Orders.Core.Entities;
 using Pacco.Services.Orders.Core.Repositories;
 
 namespace Pacco.Services.Orders.Application.Commands.Handlers
@@ -47,7 +46,7 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
                 throw new OrderHasNoParcelsException(command.OrderId);
             }
 
-            if (order.Status != OrderStatus.New)
+            if (!order.CanAssignVehicle)
             {
                 return;
             }

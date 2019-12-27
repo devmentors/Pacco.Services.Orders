@@ -16,7 +16,7 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
         private readonly IAppContext _appContext;
         private readonly IMessageBroker _messageBroker;
         private readonly IEventMapper _eventMapper;
-        
+
         public AddParcelToOrderHandler(IOrderRepository orderRepository, IParcelsServiceClient parcelsServiceClient,
             IAppContext appContext, IMessageBroker messageBroker, IEventMapper eventMapper)
         {
@@ -29,14 +29,7 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
 
         public async Task HandleAsync(AddParcelToOrder command)
         {
-            var order = await _orderRepository.GetContainingParcelAsync(command.ParcelId);
-            if (!(order is null))
-            {
-                ValidateAccessOrFail(order);
-                throw new ParcelAlreadyAddedToOrderException(command.OrderId, command.ParcelId);
-            }
-
-            order = await _orderRepository.GetAsync(command.OrderId);
+            var order = await _orderRepository.GetAsync(command.OrderId);
             if (order is null)
             {
                 throw new OrderNotFoundException(command.OrderId);
@@ -49,11 +42,7 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
                 throw new ParcelNotFoundException(command.ParcelId);
             }
 
-            if (!order.AddParcel(new Parcel(parcel.Id, parcel.Name, parcel.Variant, parcel.Size)))
-            {
-                throw new ParcelAlreadyAddedToOrderException(command.OrderId, command.ParcelId);
-            }
-
+            order.AddParcel(new Parcel(parcel.Id, parcel.Name, parcel.Variant, parcel.Size));
             await _orderRepository.UpdateAsync(order);
             var events = _eventMapper.MapAll(order.Events);
             await _messageBroker.PublishAsync(events.ToArray());

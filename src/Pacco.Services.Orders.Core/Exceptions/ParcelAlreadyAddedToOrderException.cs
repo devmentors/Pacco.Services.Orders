@@ -1,7 +1,6 @@
 using System;
-using Pacco.Services.Orders.Core.Exceptions;
 
-namespace Pacco.Services.Orders.Application.Exceptions
+namespace Pacco.Services.Orders.Core.Exceptions
 {
     public class ParcelAlreadyAddedToOrderException : ExceptionBase
     {

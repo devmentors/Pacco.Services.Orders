@@ -37,11 +37,7 @@ namespace Pacco.Services.Orders.Application.Commands.Handlers
                 throw new UnauthorizedOrderAccessException(order.Id, identity.Id);
             }
 
-            if (!order.DeleteParcel(command.ParcelId))
-            {
-                throw new ParcelAlreadyDeletedFromOrderException(command.OrderId, command.ParcelId);
-            }
-
+            order.DeleteParcel(command.ParcelId);
             await _orderRepository.UpdateAsync(order);
             var events = _eventMapper.MapAll(order.Events);
             await _messageBroker.PublishAsync(events.ToArray());

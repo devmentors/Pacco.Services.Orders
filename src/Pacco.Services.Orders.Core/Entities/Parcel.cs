@@ -27,7 +27,7 @@ namespace Pacco.Services.Orders.Core.Entities
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == this.GetType() && Equals((Parcel) obj);
+            return obj.GetType() == GetType() && Equals((Parcel) obj);
         }
 
         public override int GetHashCode()

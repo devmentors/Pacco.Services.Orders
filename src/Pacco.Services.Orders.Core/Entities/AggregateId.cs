@@ -16,7 +16,7 @@ namespace Pacco.Services.Orders.Core.Entities
         {
             if (value == Guid.Empty)
             {
-                throw new InvalidAggregateIdException();
+                throw new InvalidAggregateIdException(value);
             }
 
             Value = value;

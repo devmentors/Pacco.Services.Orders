@@ -17,6 +17,7 @@ namespace Pacco.Services.Orders.Core.Entities
         public decimal TotalPrice { get; private set; }
         public string CancellationReason { get; private set; }
         public bool CanBeDeleted => Status == OrderStatus.New;
+        public bool CanAssignVehicle => Status == OrderStatus.New || Status == OrderStatus.Canceled;
         public bool HasParcels => Parcels.Any();
 
         public IEnumerable<Parcel> Parcels
@@ -34,17 +35,18 @@ namespace Pacco.Services.Orders.Core.Entities
             Status = status;
             CreatedAt = createdAt;
             Parcels = parcels ?? Enumerable.Empty<Parcel>();
-            if (!(vehicleId is null))
+            if (vehicleId.HasValue)
             {
                 SetVehicle(vehicleId.Value);
             }
 
-            if (!(deliveryDate is null))
+            if (deliveryDate.HasValue)
             {
                 SetDeliveryDate(deliveryDate.Value);
             }
 
             TotalPrice = totalPrice;
+            CancellationReason = string.Empty;
         }
 
         public static Order Create(AggregateId id, Guid customerId, OrderStatus status, DateTime createdAt)
@@ -61,7 +63,7 @@ namespace Pacco.Services.Orders.Core.Entities
             {
                 throw new CannotChangeOrderPriceException(Id);
             }
-            
+
             if (totalPrice < 0)
             {
                 throw new InvalidOrderPriceException(Id, totalPrice);
@@ -69,7 +71,7 @@ namespace Pacco.Services.Orders.Core.Entities
 
             TotalPrice = totalPrice;
         }
-        
+
         public void SetVehicle(Guid vehicleId)
         {
             VehicleId = vehicleId;
@@ -80,40 +82,36 @@ namespace Pacco.Services.Orders.Core.Entities
             DeliveryDate = deliveryDate.Date;
         }
 
-        public bool AddParcel(Parcel parcel)
+        public void AddParcel(Parcel parcel)
         {
             if (!_parcels.Add(parcel))
             {
-                return false;
+                throw new ParcelAlreadyAddedToOrderException(Id, parcel.Id);
             }
 
             AddEvent(new ParcelAdded(this, parcel));
-
-            return true;
         }
 
-        public bool DeleteParcel(Guid id)
+        public void DeleteParcel(Guid parcelId)
         {
-            var parcel = _parcels.SingleOrDefault(p => p.Id == id);
+            var parcel = _parcels.SingleOrDefault(p => p.Id == parcelId);
             if (parcel is null)
             {
-                return false;
+                throw new OrderParcelNotFoundException(parcelId, Id);
             }
 
-            _parcels.Remove(parcel);
             AddEvent(new ParcelDeleted(this, parcel));
-
-            return true;
         }
 
         public void Approve()
         {
-            if (Status != OrderStatus.New)
+            if (Status != OrderStatus.New && Status != OrderStatus.Canceled)
             {
                 throw new CannotChangeOrderStateException(Id, Status, OrderStatus.Approved);
             }
 
             Status = OrderStatus.Approved;
+            CancellationReason = string.Empty;
             AddEvent(new OrderStateChanged(this));
         }
 
@@ -125,14 +123,13 @@ namespace Pacco.Services.Orders.Core.Entities
             }
 
             Status = OrderStatus.Canceled;
-            CancellationReason = reason;
-            _parcels.Clear();
+            CancellationReason = reason ?? string.Empty;
             AddEvent(new OrderStateChanged(this));
         }
 
         public void Complete()
         {
-            if (Status == OrderStatus.Completed || Status == OrderStatus.Canceled)
+            if (Status != OrderStatus.Delivering)
             {
                 throw new CannotChangeOrderStateException(Id, Status, OrderStatus.Completed);
             }
