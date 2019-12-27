@@ -2,7 +2,7 @@ using System;
 
 namespace Pacco.Services.Orders.Core.Exceptions
 {
-    public class CannotDeleteOrderException : ExceptionBase
+    public class CannotDeleteOrderException : DomainException
     {
         public override string Code => "cannot_delete_order";
         public Guid OrderId { get; }

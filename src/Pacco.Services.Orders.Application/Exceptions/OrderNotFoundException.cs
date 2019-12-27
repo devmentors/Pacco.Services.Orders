@@ -1,9 +1,8 @@
 using System;
-using Pacco.Services.Orders.Core.Exceptions;
 
 namespace Pacco.Services.Orders.Application.Exceptions
 {
-    public class OrderNotFoundException : ExceptionBase
+    public class OrderNotFoundException : AppException
     {
         public override string Code => "order_not_found";
         public Guid Id { get; }

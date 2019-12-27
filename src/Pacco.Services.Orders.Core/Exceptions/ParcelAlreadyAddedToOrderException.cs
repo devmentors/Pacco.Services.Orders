@@ -2,7 +2,7 @@ using System;
 
 namespace Pacco.Services.Orders.Core.Exceptions
 {
-    public class ParcelAlreadyAddedToOrderException : ExceptionBase
+    public class ParcelAlreadyAddedToOrderException : DomainException
     {
         public override string Code => "parcel_already_added_to_order";
         public Guid OrderId { get; }

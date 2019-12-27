@@ -1,9 +1,8 @@
 using System;
-using Pacco.Services.Orders.Core.Exceptions;
 
 namespace Pacco.Services.Orders.Application.Exceptions
 {
-    public class UnauthorizedOrderAccessException : ExceptionBase
+    public class UnauthorizedOrderAccessException : AppException
     {
         public override string Code => "unauthorized_order_access";
 

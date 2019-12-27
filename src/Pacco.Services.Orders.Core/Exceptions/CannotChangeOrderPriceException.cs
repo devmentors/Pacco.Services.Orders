@@ -2,7 +2,7 @@ using System;
 
 namespace Pacco.Services.Orders.Core.Exceptions
 {
-    public class CannotChangeOrderPriceException : ExceptionBase
+    public class CannotChangeOrderPriceException : DomainException
     {
         public override string Code => "cannot_change_order_price";
         public Guid OrderId { get; }

@@ -1,9 +1,8 @@
 using System;
-using Pacco.Services.Orders.Core.Exceptions;
 
 namespace Pacco.Services.Orders.Application.Exceptions
 {
-    public class OrderForReservedVehicleNotFoundException : ExceptionBase
+    public class OrderForReservedVehicleNotFoundException : AppException
     {
         public override string Code => "order_for_reserved_vehicle_not_found";
         public Guid VehicleId { get; }

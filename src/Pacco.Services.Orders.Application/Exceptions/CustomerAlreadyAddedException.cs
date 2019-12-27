@@ -1,9 +1,8 @@
 using System;
-using Pacco.Services.Orders.Core.Exceptions;
 
 namespace Pacco.Services.Orders.Application.Exceptions
 {
-    public class CustomerAlreadyAddedException : ExceptionBase
+    public class CustomerAlreadyAddedException : AppException
     {
         public override string Code => "customer_already_added";
         public Guid CustomerId { get; }

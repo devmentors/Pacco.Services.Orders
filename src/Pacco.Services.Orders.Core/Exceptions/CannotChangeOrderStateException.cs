@@ -3,7 +3,7 @@ using Pacco.Services.Orders.Core.Entities;
 
 namespace Pacco.Services.Orders.Core.Exceptions
 {
-    public class CannotChangeOrderStateException : ExceptionBase
+    public class CannotChangeOrderStateException : DomainException
     {
         public override string Code => "cannot_change_order_state";
         public Guid OrderId { get; }

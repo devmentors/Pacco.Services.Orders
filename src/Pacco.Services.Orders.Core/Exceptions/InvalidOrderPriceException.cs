@@ -2,7 +2,7 @@ using System;
 
 namespace Pacco.Services.Orders.Core.Exceptions
 {
-    public class InvalidOrderPriceException : ExceptionBase
+    public class InvalidOrderPriceException : DomainException
     {
         public override string Code => "invalid_order_price";
 
