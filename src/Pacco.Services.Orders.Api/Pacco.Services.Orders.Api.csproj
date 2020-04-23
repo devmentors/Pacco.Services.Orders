@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Pacco.Services.Orders.Infrastructure\Pacco.Services.Orders.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="certs\**" CopyToPublishDirectory="Always"/>
+  </ItemGroup>
+
 </Project>

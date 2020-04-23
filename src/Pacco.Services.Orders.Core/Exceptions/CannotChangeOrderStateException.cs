@@ -5,7 +5,7 @@ namespace Pacco.Services.Orders.Core.Exceptions
 {
     public class CannotChangeOrderStateException : DomainException
     {
-        public override string Code => "cannot_change_order_state";
+        public override string Code { get; } = "cannot_change_order_state";
         public Guid OrderId { get; }
         public OrderStatus CurrentStatus { get; }
         public OrderStatus NextStatus { get; }

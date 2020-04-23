@@ -4,7 +4,7 @@ namespace Pacco.Services.Orders.Core.Exceptions
 {
     public class OrderParcelNotFoundException : DomainException
     {
-        public override string Code => "order_parcel_not_found";
+        public override string Code { get; } = "order_parcel_not_found";
         public Guid ParcelId { get; }
         public Guid OrderId { get; }
 
